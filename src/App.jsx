@@ -326,13 +326,16 @@ export default function CreatorCuts() {
         </Reveal>
 
         <Reveal delay={190}>
-          <p className="inter" style={{ fontSize:18,color:"#6E6E82",maxWidth:540,marginTop:28,lineHeight:1.7 }}>
+          <p className="inter" style={{ fontSize:18,color:"#6E6E82",maxWidth:540,marginTop:28,lineHeight:1.7, textAlign:"center",
+    marginLeft:"auto",
+    marginRight:"auto" }}>
             A done-for-you clipping service built for streamers. We watch every stream, find the moments that matter, and post them across your channels — so you can just focus on going live.
           </p>
         </Reveal>
 
         <Reveal delay={310}>
-          <div className="hero-btns" style={{ display:"flex",gap:14,marginTop:36,alignItems:"center" }}>
+          <div className="hero-btns" style={{ display:"flex",gap:14,marginTop:36,alignItems:"center",
+    justifyContent:"center" }}>
             <a className="btn-p" href="#plans">See plans & pricing →</a>
             <a className="btn-g" href={wa("Hi! I'd like to learn more about Creator Cuts.")} target="_blank" rel="noopener noreferrer">💬 Talk to us</a>
           </div>
@@ -340,7 +343,8 @@ export default function CreatorCuts() {
 
         {/* Stats */}
         <Reveal delay={440}>
-          <div className="srow" style={{ display:"flex",gap:14,marginTop:60,flexWrap:"wrap" }}>
+          <div className="srow" style={{ display:"flex",gap:14,marginTop:60,flexWrap:"wrap",
+    justifyContent:"center" }}>
             {[
               { val:"48hr",  sub:"Max turnaround",   note:"Spark plan" },
               { val:"60+",   sub:"Clips per month",   note:"Apex plan"  },
@@ -372,8 +376,15 @@ export default function CreatorCuts() {
       <section id="how" style={{ padding:"110px 6vw",background:"#0C0C14",borderBottom:"1px solid rgba(255,255,255,0.05)" }}>
         <Reveal>
           <div className="inter" style={{ fontSize:11.5,fontWeight:700,color:"#A78BFA",letterSpacing:"0.15em",marginBottom:12 }}>HOW IT WORKS</div>
-          <h2 className="disp" style={{ fontSize:"clamp(28px,4vw,46px)",maxWidth:640,marginBottom:14 }}>FROM RAW STREAM<br/>TO POSTED CLIP</h2>
-          <p className="inter" style={{ fontSize:15,color:"#6E6E82",maxWidth:480,marginBottom:56,lineHeight:1.65 }}>Four steps. Zero effort on your end after step one.</p>
+          <h2 className="disp" style={{ fontSize:"clamp(28px,4vw,46px)",maxWidth:640,marginBottom:14,
+
+    textAlign:"center",
+    margin:"0 auto" }}>FROM RAW STREAM<br/>TO POSTED CLIP</h2>
+          <p className="inter" style={{ fontSize:15,color:"#6E6E82",maxWidth:480,marginBottom:56,lineHeight:1.65,
+
+    textAlign:"center",
+    marginLeft:"auto",
+    marginRight:"auto" }}>Four steps. Zero effort on your end after step one.</p>
         </Reveal>
         <div className="g4" style={{ display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:18 }}>
           {STEPS.map((s,i) => (
@@ -393,8 +404,23 @@ export default function CreatorCuts() {
       <section style={{ padding:"110px 6vw",background:"#08080E" }}>
         <Reveal>
           <div className="inter" style={{ fontSize:11.5,fontWeight:700,color:"#A78BFA",letterSpacing:"0.15em",marginBottom:12 }}>WHY US</div>
-          <h2 className="disp" style={{ fontSize:"clamp(28px,4vw,46px)",marginBottom:14 }}>WHAT SETS US APART</h2>
-          <p className="inter" style={{ fontSize:15,color:"#6E6E82",maxWidth:480,marginBottom:56,lineHeight:1.65 }}>Most editors just cut clips. We build a short-form presence that actually grows your channel.</p>
+          <h2 className="disp" style={{ fontSize:"clamp(28px,4vw,46px)",marginBottom:14, textAlign:"center",
+marginLeft:"auto",
+marginRight:"auto" }}>WHAT SETS US APART</h2>
+          <p
+  className="inter"
+  style={{
+    fontSize:15,
+    color:"#6E6E82",
+    maxWidth:480,
+    marginBottom:56,
+    lineHeight:1.65,
+
+    textAlign:"center",
+    marginLeft:"auto",
+    marginRight:"auto"
+  }}
+>Most editors just cut clips. We build a short-form presence that actually grows your channel.</p>
         </Reveal>
         <div className="g3w" style={{ display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:16 }}>
           {WHY.map((w,i) => (
