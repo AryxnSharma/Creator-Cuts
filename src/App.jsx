@@ -520,7 +520,7 @@ marginRight:"auto" }}>WHAT SETS US APART</h2>
         <Reveal>
           <div className="inter" style={{ textAlign:"center",marginBottom:22,fontSize:11.5,fontWeight:700,color:"#6E6E82",letterSpacing:"0.14em" }}>WE POST ON</div>
           <div style={{ display:"flex",gap:36,justifyContent:"center",flexWrap:"wrap",alignItems:"center" }}>
-            {[["🟣","Twitch"],["▶","YouTube Shorts"],["📸","Instagram Reels"],["⚡","Kick"],["♪","TikTok"]].map(([icon,label]) => (
+            {[["🟣","Twitch"],["▶","YouTube"],["📸","Instagram Reels"],["⚡","Kick"]].map(([icon,label]) => (
               <div key={label} className="inter" style={{ display:"flex",alignItems:"center",gap:8,color:"#6E6E82",fontSize:14,fontWeight:600,cursor:"default",transition:"color .2s" }}
                 onMouseEnter={e=>e.currentTarget.style.color="#F0F0F6"}
                 onMouseLeave={e=>e.currentTarget.style.color="#6E6E82"}>
