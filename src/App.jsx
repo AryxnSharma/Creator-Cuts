@@ -302,6 +302,13 @@ export default function CreatorCuts() {
         <div className="orb1" style={{ position:"absolute",top:"-12%",right:"-6%",width:520,height:520,borderRadius:"50%",background:"radial-gradient(circle,rgba(124,58,255,0.3),transparent 70%)",filter:"blur(52px)",pointerEvents:"none" }} />
         <div className="orb2" style={{ position:"absolute",bottom:"-18%",left:"-8%",width:460,height:460,borderRadius:"50%",background:"radial-gradient(circle,rgba(217,70,201,0.2),transparent 70%)",filter:"blur(52px)",pointerEvents:"none" }} />
         <div className="orb3" style={{ position:"absolute",top:"40%",left:"40%",width:300,height:300,borderRadius:"50%",background:"radial-gradient(circle,rgba(124,58,255,0.1),transparent 70%)",filter:"blur(60px)",pointerEvents:"none" }} />
+        <div
+  style={{
+    width:"100%",
+    maxWidth:"1200px",
+    margin:"0 auto"
+  }}
+></div>
 
         <Reveal>
           <div style={{ display:"inline-flex",alignItems:"center",gap:8,background:"rgba(124,58,255,0.1)",border:"1px solid rgba(124,58,255,0.28)",padding:"8px 18px",borderRadius:999,fontSize:12.5,fontWeight:600,color:"#A78BFA",marginBottom:30,width:"fit-content",fontFamily:"Inter,sans-serif" }}>
@@ -311,7 +318,7 @@ export default function CreatorCuts() {
         </Reveal>
 
         <Reveal delay={80}>
-          <h1 className="disp htitle" style={{ fontSize:"clamp(46px,7vw,108px)",lineHeight:0.93,maxWidth:1140,marginBottom:0 }}>
+          <h1 className="disp htitle" style={{ fontSize:"clamp(52px,8vw,110px)",lineHeight:0.93,maxWidth:"100%",marginBottom:0 }}>
             WE CUT YOUR{" "}
             <span style={{ color:"#A78BFA",position:"relative",display:"inline-block" }}>
               STREAMS
