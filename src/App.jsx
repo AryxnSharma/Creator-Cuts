@@ -260,13 +260,29 @@ export default function CreatorCuts() {
           .nav-links{display:none !important;}
           .ham{display:flex !important;}
           .g4{grid-template-columns:1fr 1fr !important;}
-          .g3{grid-template-columns:1fr !important;}
+          .g3{
+  grid-template-columns:1fr !important;
+  justify-items:center;
+}
+  .plan-card{
+  width:100% !important;
+  max-width:380px;
+  margin:0 auto;
+}
           .g3w{grid-template-columns:1fr 1fr !important;}
           .htitle{font-size:12vw !important;}
           .srow{flex-wrap:wrap;gap:16px !important;}
           .hero-btns{flex-wrap:wrap;}
         }
         @media(max-width:560px){
+        .footer-contact{
+    text-align:center;
+}
+
+.footer-contact a,
+.footer-contact > div[onClick]{
+    justify-content:center;
+}
           .g4{grid-template-columns:1fr !important;}
           .g3w{grid-template-columns:1fr !important;}
           .htitle{font-size:14.5vw !important;}
@@ -490,7 +506,21 @@ marginRight:"auto" }}>WHAT SETS US APART</h2>
           </div>
         </Reveal>
 
-        <div className="g3" style={{ display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:22,marginTop:56,alignItems:"stretch" }}>
+        <div
+  className="g3"
+  style={{
+    display:"grid",
+    gridTemplateColumns:"repeat(3,minmax(0,1fr))",
+    gap:22,
+    marginTop:56,
+    alignItems:"stretch",
+    justifyItems:"center",
+    width:"100%",
+    maxWidth:"1400px",
+    marginLeft:"auto",
+    marginRight:"auto"
+  }}
+>
           {PLANS.map((p,i) => (
             <Reveal delay={i*120} key={p.name} style={{ height:"100%" }}>
               <div
@@ -498,7 +528,9 @@ marginRight:"auto" }}>WHAT SETS US APART</h2>
                 onMouseEnter={() => setHoveredPlan(p.name)}
                 onMouseLeave={() => setHoveredPlan(null)}
                 style={{
-                  position:"relative",height:"100%",
+                  position:"relative",height:"100%",width:"100%",
+  maxWidth:"420px",
+  margin:"0 auto",
                   background: p.highlight
                     ? "linear-gradient(160deg,rgba(124,58,255,0.18),#111119 50%)"
                     : hoveredPlan === p.name ? "#141420" : "#111119",
@@ -728,7 +760,14 @@ gap:10
           </div>
 
           {/* Contact */}
-          <div>
+<div
+  className="footer-contact"
+  style={{
+    display:"flex",
+    flexDirection:"column",
+    alignItems:"center"
+  }}
+>
             <div className="inter" style={{ fontSize:11,fontWeight:700,color:"#6E6E82",letterSpacing:"0.12em",marginBottom:18 }}>CONTACT US</div>
             <a href="https://www.instagram.com/creatorcuts.in/" target="_blank" rel="noopener noreferrer" style={{ display:"flex",alignItems:"center",gap:10,textDecoration:"none",marginBottom:14 }}>
               <span style={{ fontSize:16 }}>📸</span>
@@ -746,9 +785,17 @@ gap:10
                 @CreatorCuts-in
               </span>
             </a>
-            <div
-              onClick={copyEmail}
-              style={{ display:"flex",alignItems:"center",gap:10,cursor:"pointer",marginBottom:14 }}>
+           <div
+  onClick={copyEmail}
+  style={{
+    display:"flex",
+    justifyContent:"center",
+    alignItems:"center",
+    gap:10,
+    cursor:"pointer",
+    marginBottom:14
+  }}
+>
               <span style={{ fontSize:16 }}>📧</span>
               <span className="inter" style={{ fontSize:13.5,color: copied ? "#A78BFA" : "#6E6E82",transition:"color .2s" }}>
                 {copied ? "Copied! ✓" : "info@creatorcuts.in"}
