@@ -14,7 +14,7 @@ const PLANS = [
     name: "Surge", emoji: "⚡", price: "14,999",
     tag: "For streamers ready to scale their reach",
     clips: "35 edited clips / month", highlight: true,
-    features: ["Posted to 3 platforms (YT Shorts, Reels, TikTok)","24-hour turnaround per batch","Custom thumbnail design","Trend-matched hooks & pacing","Bi-weekly strategy check-in"],
+    features: ["Posted to 2 platforms (YT Shorts, Reels)","24-hour turnaround per batch","Custom thumbnail design","Trend-matched hooks & pacing","Bi-weekly strategy check-in"],
   },
   {
     name: "Apex", emoji: "◆", price: "29,999",
@@ -212,6 +212,29 @@ export default function CreatorCuts() {
           text-decoration:none;color:#F0F0F6;
         }
         .soc:hover{background:rgba(124,58,255,0.18);border-color:rgba(124,58,255,0.45);transform:translateY(-3px);}
+        /* Floating WhatsApp */
+.wa-float{
+  position:fixed;
+  right:24px;
+  bottom:24px;
+  width:60px;
+  height:60px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#25D366,#1EBE5D);
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+  text-decoration:none;
+  box-shadow:0 10px 30px rgba(37,211,102,.35);
+  z-index:999;
+  transition:all .25s ease;
+}
+
+.wa-float:hover{
+  transform:translateY(-4px) scale(1.08);
+}
 
         /* Mobile menu */
         .mob-menu{
@@ -248,6 +271,13 @@ export default function CreatorCuts() {
           .g4{grid-template-columns:1fr !important;}
           .g3w{grid-template-columns:1fr !important;}
           .htitle{font-size:14.5vw !important;}
+          .wa-float{
+  width:54px;
+  height:54px;
+  right:16px;
+  bottom:16px;
+  font-size:24px;
+}
         }
       `}</style>
 
@@ -297,28 +327,29 @@ export default function CreatorCuts() {
       </nav>
 
       {/* ── HERO ── */}
-      <section style={{ position:"relative",padding:"170px 6vw 100px",minHeight:"96vh",display:"flex",flexDirection:"column",justifyContent:"center",overflow:"hidden" }}>
+      <section style={{ position:"relative",padding:"170px clamp(20px,6vw,80px) 100px",minHeight:"96vh",display:"flex",flexDirection:"column",justifyContent:"center",overflow:"hidden" }}>
         {/* Orbs */}
         <div className="orb1" style={{ position:"absolute",top:"-12%",right:"-6%",width:520,height:520,borderRadius:"50%",background:"radial-gradient(circle,rgba(124,58,255,0.3),transparent 70%)",filter:"blur(52px)",pointerEvents:"none" }} />
         <div className="orb2" style={{ position:"absolute",bottom:"-18%",left:"-8%",width:460,height:460,borderRadius:"50%",background:"radial-gradient(circle,rgba(217,70,201,0.2),transparent 70%)",filter:"blur(52px)",pointerEvents:"none" }} />
         <div className="orb3" style={{ position:"absolute",top:"40%",left:"40%",width:300,height:300,borderRadius:"50%",background:"radial-gradient(circle,rgba(124,58,255,0.1),transparent 70%)",filter:"blur(60px)",pointerEvents:"none" }} />
-        <div
-  style={{
-    width:"100%",
-    maxWidth:"1200px",
-    margin:"0 auto"
-  }}
-></div>
+        
 
         <Reveal>
-          <div style={{ display:"inline-flex",alignItems:"center",gap:8,background:"rgba(124,58,255,0.1)",border:"1px solid rgba(124,58,255,0.28)",padding:"8px 18px",borderRadius:999,fontSize:12.5,fontWeight:600,color:"#A78BFA",marginBottom:30,width:"fit-content",fontFamily:"Inter,sans-serif" }}>
+          <div style={{ display:"inline-flex",marginLeft:"auto",
+marginRight:"auto",alignItems:"center",gap:8,background:"rgba(124,58,255,0.1)",border:"1px solid rgba(124,58,255,0.28)",padding:"8px 18px",borderRadius:999,fontSize:12.5,fontWeight:600,color:"#A78BFA",marginBottom:30,width:"fit-content",fontFamily:"Inter,sans-serif" }}>
             <span style={{ width:7,height:7,borderRadius:"50%",background:"#A78BFA",display:"inline-block",boxShadow:"0 0 8px #A78BFA",animation:"floaty 2s ease-in-out infinite" }} />
             Now onboarding streamers for July 2026
           </div>
         </Reveal>
 
         <Reveal delay={80}>
-          <h1 className="disp htitle" style={{ fontSize:"clamp(52px,8vw,110px)",lineHeight:0.93,maxWidth:"100%",marginBottom:0 }}>
+          <h1 className="disp htitle" style={{
+  fontSize:"clamp(48px,6.8vw,96px)",
+  lineHeight:0.92,
+  maxWidth:"980px",
+  margin:"0 auto",
+  textAlign:"center"
+}}>
             WE CUT YOUR{" "}
             <span style={{ color:"#A78BFA",position:"relative",display:"inline-block" }}>
               STREAMS
@@ -366,7 +397,8 @@ export default function CreatorCuts() {
             ))}
           </div>
         </Reveal>
-      </section>
+
+</section>
 
       {/* ── MARQUEE ── */}
       <div style={{ borderTop:"1px solid rgba(255,255,255,0.05)",borderBottom:"1px solid rgba(255,255,255,0.05)",background:"#0C0C14",padding:"15px 0",overflow:"hidden" }}>
@@ -484,12 +516,49 @@ marginRight:"auto" }}>WHAT SETS US APART</h2>
                 )}
                 <div className="disp" style={{ fontSize:20,marginBottom:6 }}>{p.emoji} {p.name}</div>
                 <div className="inter" style={{ fontSize:13,color:"#6E6E82",marginBottom:22,minHeight:36,lineHeight:1.5 }}>{p.tag}</div>
-                <div style={{ display:"flex",alignItems:"baseline",gap:4,marginBottom:4 }}>
-                  <span className="inter" style={{ fontSize:16,color:"#6E6E82",fontWeight:600 }}>₹</span>
-                  <span className="disp" style={{ fontSize:42,lineHeight:1 }}>{p.price}</span>
-                  <span className="inter" style={{ fontSize:13,color:"#6E6E82" }}>/month</span>
-                </div>
-                <div className="inter" style={{ fontSize:13.5,color:"#A78BFA",fontWeight:700,marginBottom:24 }}>{p.clips}</div>
+                
+                <div
+style={{
+background:"rgba(124,58,255,0.08)",
+border:"1px solid rgba(124,58,255,0.18)",
+borderRadius:10,
+padding:"12px 16px",
+marginBottom:24,
+display:"flex",
+alignItems:"center",
+gap:10
+}}
+>
+
+<span style={{fontSize:20}}>✂️</span>
+
+<div>
+
+<div
+className="inter"
+style={{
+fontWeight:700,
+fontSize:14,
+color:"#A78BFA"
+}}
+>
+{p.clips}
+</div>
+
+<div
+className="inter"
+style={{
+fontSize:11.5,
+color:"#6E6E82",
+marginTop:2
+}}
+>
+Edited, captioned & ready to post
+</div>
+
+</div>
+
+</div>
                 <div style={{ height:1,background:"rgba(255,255,255,0.07)",marginBottom:22 }} />
                 <div style={{ display:"flex",flexDirection:"column",gap:12,marginBottom:28,flex:1 }}>
                   {p.features.map(f => (
@@ -501,11 +570,11 @@ marginRight:"auto" }}>WHAT SETS US APART</h2>
                 </div>
                 <a
                   className={p.highlight ? "btn-p" : "btn-g"}
-                  href={wa(`Hi! I'm interested in the ${p.name} plan (₹${p.price}/month) on Creator Cuts.`)}
+                  href={wa(`Hi! I'm interested in the ${p.name} plan on Creator Cuts. Can you share the pricing?`)}
                   target="_blank" rel="noopener noreferrer"
                   style={{ textAlign:"center",width:"100%",display:"block" }}
                 >
-                  Choose {p.name} →
+                  Get {p.name} pricing on WhatsApp
                 </a>
               </div>
             </Reveal>
@@ -674,7 +743,19 @@ marginRight:"auto" }}>WHAT SETS US APART</h2>
           <span className="inter" style={{ fontSize:12,color:"#3a3a52" }}>© 2026 Creator Cuts. All streams, sharpened.</span>
           <span className="inter" style={{ fontSize:12,color:"#3a3a52" }}>creatorcuts.in</span>
         </div>
-      </footer>
+            </footer>
+
+      {/* Floating WhatsApp Button */}
+      <a
+        className="wa-float"
+        href={wa("Hi! I'm interested in Creator Cuts.")}
+        target="_blank"
+        rel="noopener noreferrer"
+        title="Chat on WhatsApp"
+      >
+        💬
+      </a>
+
     </div>
   );
 }
