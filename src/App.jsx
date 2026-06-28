@@ -122,7 +122,10 @@ export default function CreatorCuts() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState(null);
   const [copied, setCopied] = useState(false);
+  const [hiringBar, setHiringBar] = useState(true);
 
+// Replace this with your hiring page later
+const FORM_URL = "https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform";
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 30);
     window.addEventListener("scroll", fn);
@@ -225,6 +228,61 @@ export default function CreatorCuts() {
 
         .wa-float{position:fixed;right:24px;bottom:24px;width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#25D366,#1EBE5D);color:#fff;display:flex;align-items:center;justify-content:center;font-size:28px;text-decoration:none;box-shadow:0 10px 30px rgba(37,211,102,.35);z-index:999;transition:all .25s ease;}
         .wa-float:hover{transform:translateY(-4px) scale(1.08);}
+        .hiring-bar{
+position:fixed;
+top:0;
+left:0;
+right:0;
+z-index:101;
+background:linear-gradient(90deg,#1a0a2e,#0f0520,#1a0a2e);
+border-bottom:1px solid rgba(124,58,255,.35);
+padding:9px 6vw;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:14px;
+font-family:'Inter',sans-serif;
+}
+
+.hiring-bar::before{
+content:'';
+position:absolute;
+inset:0;
+background:linear-gradient(90deg,transparent,rgba(124,58,255,.08),transparent);
+animation:shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer{
+0%,100%{opacity:0;}
+50%{opacity:1;}
+}
+
+.hiring-btn{
+background:linear-gradient(135deg,#7C3AFF,#D946C9);
+color:white;
+padding:5px 14px;
+border-radius:6px;
+font-size:12px;
+font-weight:700;
+text-decoration:none;
+transition:.2s;
+z-index:2;
+}
+
+.hiring-btn:hover{
+transform:scale(1.05);
+}
+
+.hiring-close{
+position:absolute;
+right:6vw;
+background:none;
+border:none;
+color:rgba(255,255,255,.45);
+font-size:16px;
+cursor:pointer;
+z-index:2;
+}
 
         .mob-menu{position:fixed;inset:0;background:rgba(8,8,14,0.97);backdrop-filter:blur(24px);z-index:99;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:36px;}
         .mob-a{color:#F0F0F6;text-decoration:none;font-family:'Anton',sans-serif;font-size:36px;letter-spacing:0.02em;text-transform:uppercase;transition:color .2s;}
@@ -249,6 +307,48 @@ export default function CreatorCuts() {
           .wa-float{width:54px;height:54px;right:16px;bottom:16px;font-size:24px;}
         }
       `}</style>
+      {hiringBar && (
+<div className="hiring-bar">
+
+<span style={{fontSize:14}}>
+✂️
+</span>
+
+<span
+className="inter"
+style={{
+fontSize:13,
+fontWeight:600,
+color:"rgba(255,255,255,.85)"
+}}
+>
+
+<span style={{color:"#A78BFA"}}>
+We're Hiring Editors
+</span>
+
+{" "}— Join the Creator Cuts team
+
+</span>
+
+<a
+className="hiring-btn"
+href={FORM_URL}
+target="_blank"
+rel="noopener noreferrer"
+>
+Apply Now →
+</a>
+
+<button
+className="hiring-close"
+onClick={()=>setHiringBar(false)}
+>
+✕
+</button>
+
+</div>
+)}
 
       {/* ── MOBILE MENU ── */}
       {menuOpen && (
@@ -267,7 +367,7 @@ export default function CreatorCuts() {
 
       {/* ── NAV ── */}
       <nav style={{
-        position:"fixed",top:0,left:0,right:0,zIndex:100,
+        position:"fixed",top:hiringBar ? 38 : 0,left:0,right:0,zIndex:100,
         padding: scrolled ? "12px 6vw" : "20px 6vw",
         background: scrolled ? "rgba(8,8,14,0.9)" : "transparent",
         backdropFilter: scrolled ? "blur(20px)" : "none",
@@ -296,7 +396,7 @@ export default function CreatorCuts() {
       </nav>
 
       {/* ── HERO ── */}
-      <section style={{ position:"relative",padding:"170px clamp(20px,6vw,80px) 100px",minHeight:"96vh",display:"flex",flexDirection:"column",justifyContent:"center",overflow:"hidden" }}>
+      <section style={{ position:"relative",padding:`${hiringBar ? 210 : 170}px clamp(20px,6vw,80px) 100px`,minHeight:"96vh",display:"flex",flexDirection:"column",justifyContent:"center",overflow:"hidden" }}>
         <div className="orb1" style={{ position:"absolute",top:"-12%",right:"-6%",width:520,height:520,borderRadius:"50%",background:"radial-gradient(circle,rgba(124,58,255,0.3),transparent 70%)",filter:"blur(52px)",pointerEvents:"none" }} />
         <div className="orb2" style={{ position:"absolute",bottom:"-18%",left:"-8%",width:460,height:460,borderRadius:"50%",background:"radial-gradient(circle,rgba(217,70,201,0.2),transparent 70%)",filter:"blur(52px)",pointerEvents:"none" }} />
         <div className="orb3" style={{ position:"absolute",top:"40%",left:"40%",width:300,height:300,borderRadius:"50%",background:"radial-gradient(circle,rgba(124,58,255,0.1),transparent 70%)",filter:"blur(60px)",pointerEvents:"none" }} />
