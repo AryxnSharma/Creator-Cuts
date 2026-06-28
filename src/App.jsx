@@ -635,7 +635,7 @@ export default function CreatorCuts() {
             <div onClick={copyEmail} style={{ display:"flex",alignItems:"center",gap:10,cursor:"pointer",marginBottom:14 }}>
               <span style={{ fontSize:16 }}>📧</span>
               <span className="inter" style={{ fontSize:13.5,color: copied ? "#A78BFA" : "#6E6E82",transition:"color .2s" }}>
-                {copied ? "Copied! ✓" : "info@creatorcuts.in"}
+                {copied ? "Copied! ✓" : "contact@creatorcuts.in"}
               </span>
             </div>
             <a href={wa("Hi! I'm interested in Creator Cuts.")} target="_blank" rel="noopener noreferrer" style={{ display:"flex",alignItems:"center",gap:10,textDecoration:"none" }}>
