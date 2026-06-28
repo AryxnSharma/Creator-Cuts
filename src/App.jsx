@@ -270,6 +270,11 @@ export default function CreatorCuts() {
           .g4{grid-template-columns:1fr !important;}
           .g3w{grid-template-columns:1fr !important;}
           .htitle{font-size:14.5vw !important;}
+          .footer-grid{
+    grid-template-columns:1fr !important;
+    gap:32px !important;
+    text-align:center;
+}
           .wa-float{
   width:54px;
   height:54px;
@@ -658,19 +663,42 @@ Edited, captioned & ready to post
       </section>
 
       {/* ── FOOTER ── */}
-      <footer style={{ background:"#0C0C14",borderTop:"1px solid rgba(255,255,255,0.06)",padding:"56px 6vw 36px" }}>
-        <div style={{ display:"grid",gridTemplateColumns:"2fr 1fr 1fr 1.5fr",gap:40,marginBottom:52,flexWrap:"wrap" }}>
+      <footer style={{ background:"#0C0C14",borderTop:"1px solid rgba(255,255,255,0.06)",padding:"56px 6vw 90px" }}>
+        <div
+  className="footer-grid"
+  style={{
+    display:"grid",
+    gridTemplateColumns:"2fr 1fr 1fr 1.5fr",
+    gap:40,
+    marginBottom:52
+  }}
+>
 
           {/* Brand */}
           <div>
-            <div style={{ display:"flex",alignItems:"center",gap:9,marginBottom:16 }}>
+            <div
+style={{
+display:"flex",
+alignItems:"center",
+justifyContent:"center",
+gap:9,
+marginBottom:16
+}}
+>
               <Logo size={26} />
               <span className="disp" style={{ fontSize:15,color:"#F0F0F6" }}>CREATOR<span style={{ color:"#A78BFA" }}>CUTS</span></span>
             </div>
-            <p className="inter" style={{ fontSize:13.5,color:"#6E6E82",lineHeight:1.75,maxWidth:260,marginBottom:22 }}>
+            <p className="inter" style={{ fontSize:13.5,color:"#6E6E82",lineHeight:1.75,maxWidth:260,
+margin:"0 auto 22px" }}>
               A done-for-you clipping agency for streamers. We clip, edit, and post — you just go live.
             </p>
-            <div style={{ display:"flex",gap:10 }}>
+            <div
+style={{
+display:"flex",
+justifyContent:"center",
+gap:10
+}}
+>
               <a href="https://www.instagram.com/creatorcuts.in/" target="_blank" rel="noopener noreferrer" className="soc" title="Instagram">📸</a>
               <a href="https://www.youtube.com/@CreatorCuts-in" target="_blank" rel="noopener noreferrer" className="soc" title="YouTube">▶</a>
               <a href={wa("Hi! I'm reaching out about Creator Cuts.")} target="_blank" rel="noopener noreferrer" className="soc" title="WhatsApp">💬</a>
