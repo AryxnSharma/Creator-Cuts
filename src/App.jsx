@@ -59,19 +59,18 @@ const WHY = [
   { icon: "💬", title: "Direct WhatsApp Access", desc: "No ticket systems. No 3-day email chains. You message us on WhatsApp and we respond. That's it." },
 ];
 
-// ── Logo SVG (no external image dependency) ──
+// ── Logo Image ──
 const Logo = ({ size = 32 }) => (
-  <svg viewBox="0 0 100 100" width={size} height={size}>
-    <defs>
-      <linearGradient id="ccg" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stopColor="#A78BFA" />
-        <stop offset="100%" stopColor="#7C3AFF" />
-      </linearGradient>
-    </defs>
-    <path d="M68 18 A32 32 0 1 0 68 82 L50 50 Z" fill="url(#ccg)" />
-    <path d="M32 18 A32 32 0 1 1 32 82 L50 50 Z" fill="#C7C7D1" />
-    <line x1="20" y1="50" x2="80" y2="50" stroke="rgba(255,255,255,0.15)" strokeWidth="1.5" />
-  </svg>
+  <img
+    src="/favicon.png"
+    alt="Creator Cuts"
+    width={size}
+    height={size}
+    style={{
+      objectFit: "contain",
+      display: "block"
+    }}
+  />
 );
 
 // ── Reveal on scroll ──
