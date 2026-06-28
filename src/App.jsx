@@ -130,7 +130,7 @@ export default function CreatorCuts() {
   }, []);
 
   const copyEmail = () => {
-    navigator.clipboard.writeText("info@creatorcuts.in");
+    navigator.clipboard.writeText("contact@creatorcuts.in");
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
