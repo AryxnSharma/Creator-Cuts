@@ -85,12 +85,18 @@ const Reveal = ({ children, delay = 0, style = {} }) => {
     return () => obs.disconnect();
   }, []);
   return (
-    <div ref={ref} style={{
-      opacity: shown ? 1 : 0,
-      transform: shown ? "translateY(0)" : "translateY(32px)",
-      transition: `opacity 0.75s cubic-bezier(.16,1,.3,1) ${delay}ms, transform 0.75s cubic-bezier(.16,1,.3,1) ${delay}ms`,
-      ...style,
-    }}>{children}</div>
+    <div
+  ref={ref}
+  style={{
+    opacity: shown ? 1 : 0,
+    transform: shown ? "translateY(0)" : "translateY(32px)",
+    transition: `opacity 0.75s cubic-bezier(.16,1,.3,1) ${delay}ms,
+                 transform 0.75s cubic-bezier(.16,1,.3,1) ${delay}ms`,
+    width: "100%",
+    overflow: "visible",
+    ...style,
+  }}
+>{children}</div>
   );
 };
 
@@ -261,13 +267,20 @@ export default function CreatorCuts() {
           .ham{display:flex !important;}
           .g4{grid-template-columns:1fr 1fr !important;}
           .g3{
-  grid-template-columns:1fr !important;
-  justify-items:center;
+    grid-template-columns:1fr !important;
+    justify-items:center;
+    padding:0 16px !important;
 }
-  .plan-card{
-  width:100% !important;
-  max-width:380px;
-  margin:0 auto;
+
+.g3 > div{
+    width:100%;
+    max-width:380px;
+}
+
+.plan-card{
+    width:100% !important;
+    max-width:100% !important;
+    margin:0 auto;
 }
           .g3w{grid-template-columns:1fr 1fr !important;}
           .htitle{font-size:12vw !important;}
@@ -495,7 +508,14 @@ marginRight:"auto" }}>WHAT SETS US APART</h2>
       </section>
 
       {/* ── PLANS ── */}
-      <section id="plans" style={{ padding:"110px 6vw",background:"#0C0C14",borderTop:"1px solid rgba(255,255,255,0.05)" }}>
+      <section
+  id="plans"
+  style={{
+    padding:"110px 12px",
+    background:"#0C0C14",
+    borderTop:"1px solid rgba(255,255,255,0.05)"
+  }}
+>
         <Reveal>
           <div style={{ textAlign:"center" }}>
             <div className="inter" style={{ fontSize:11.5,fontWeight:700,color:"#A78BFA",letterSpacing:"0.15em",marginBottom:12 }}>PLANS & PRICING</div>
@@ -515,21 +535,35 @@ marginRight:"auto" }}>WHAT SETS US APART</h2>
     marginTop:56,
     alignItems:"stretch",
     justifyItems:"center",
+
     width:"100%",
     maxWidth:"1400px",
-    marginLeft:"auto",
-    marginRight:"auto"
+
+    margin:"0 auto",
+    boxSizing:"border-box",
+
+    padding:"0 8px"
   }}
 >
           {PLANS.map((p,i) => (
-            <Reveal delay={i*120} key={p.name} style={{ height:"100%" }}>
+            <Reveal
+  delay={i*120}
+  key={p.name}
+  style={{
+    width:"100%",
+    height:"100%",
+    display:"flex",
+    justifyContent:"center"
+  }}
+>
               <div
                 className="plan-card"
                 onMouseEnter={() => setHoveredPlan(p.name)}
                 onMouseLeave={() => setHoveredPlan(null)}
                 style={{
                   position:"relative",height:"100%",width:"100%",
-  maxWidth:"420px",
+maxWidth:"380px",
+minWidth:"0",
   margin:"0 auto",
                   background: p.highlight
                     ? "linear-gradient(160deg,rgba(124,58,255,0.18),#111119 50%)"
