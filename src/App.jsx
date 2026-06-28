@@ -236,7 +236,7 @@ right:0;
 z-index:101;
 background:linear-gradient(90deg,#1a0a2e,#0f0520,#1a0a2e);
 border-bottom:1px solid rgba(124,58,255,.35);
-padding:9px 6vw;
+padding:7px 6vw;
 display:flex;
 align-items:center;
 justify-content:center;
@@ -261,18 +261,27 @@ animation:shimmer 3s ease-in-out infinite;
 background:linear-gradient(135deg,#7C3AFF,#D946C9);
 color:white;
 padding:5px 14px;
-border-radius:6px;
+border-radius:8px;
 font-size:12px;
 font-weight:700;
 text-decoration:none;
 transition:.2s;
 z-index:2;
+animation:pulseHire 2s infinite;
 }
 
 .hiring-btn:hover{
 transform:scale(1.05);
 }
+@keyframes pulseHire{
+0%,100%{
+box-shadow:0 0 0 rgba(124,58,255,0);
+}
 
+50%{
+box-shadow:0 0 18px rgba(124,58,255,.45);
+}
+}
 .hiring-close{
 position:absolute;
 right:6vw;
@@ -323,7 +332,7 @@ color:"rgba(255,255,255,.85)"
 }}
 >
 
-<span style={{color:"#A78BFA"}}>
+<span style={{color:"#C4B5FD"}}>
 We're Hiring Editors
 </span>
 
@@ -425,7 +434,7 @@ onClick={()=>setHiringBar(false)}
 
         <Reveal delay={190}>
           <p className="inter" style={{ fontSize:18,color:"#6E6E82",maxWidth:540,marginTop:28,lineHeight:1.7,textAlign:"center",marginLeft:"auto",marginRight:"auto" }}>
-            A done-for-you clipping service built for streamers. We watch every stream, find the moments that matter, and post them across your channels — so you can just focus on going live.
+            A done-for-you clipping service built for streamers. We watch every stream, find the moments that matter, and post them across multiple platforms — so you can just focus on creating content.
           </p>
         </Reveal>
 
