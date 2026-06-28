@@ -5,22 +5,46 @@ const wa = (msg) => `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
 
 const PLANS = [
   {
-    name: "Spark", emoji: "✦", price: "6,999",
+    name: "Spark", emoji: "✦",
     tag: "For streamers just starting their clip game",
     clips: "15 edited clips / month", highlight: false,
-    features: ["Posted to 1 platform of your choice","48-hour turnaround per batch","Cinematic captions & sound design","Monthly performance recap"],
+    badge: null,
+    features: [
+      "Posted to 1 platform of your choice",
+      "48-hour turnaround per batch",
+      "Cinematic captions & sound design",
+      "Trend-matched hooks & pacing",
+      "Monthly performance recap",
+    ],
   },
   {
-    name: "Surge", emoji: "⚡", price: "14,999",
+    name: "Surge", emoji: "⚡",
     tag: "For streamers ready to scale their reach",
     clips: "35 edited clips / month", highlight: true,
-    features: ["Posted to 2 platforms (YT Shorts, Reels)","24-hour turnaround per batch","Custom thumbnail design","Trend-matched hooks & pacing","Bi-weekly strategy check-in"],
+    badge: "MOST POPULAR",
+    features: [
+      "Posted to 2 platforms (Shorts, Reels)",
+      "24-hour turnaround per batch",
+      "Custom thumbnail design",
+      "Trend-matched hooks & pacing",
+      "Bi-weekly strategy check-in",
+      "Priority WhatsApp support",
+    ],
   },
   {
-    name: "Apex", emoji: "◆", price: "29,999",
+    name: "Apex", emoji: "◆",
     tag: "For full-time streamers building a brand",
     clips: "60+ edited clips / month", highlight: false,
-    features: ["Posted to all major platforms","12-hour priority turnaround","Dedicated personal editor","Channel art & thumbnail suite","Monthly 1:1 strategy call","Detailed analytics dashboard"],
+    badge: "BEST VALUE",
+    features: [
+      "Posted to all major platforms",
+      "12-hour priority turnaround",
+      "Dedicated personal editor",
+      "Channel art & thumbnail suite",
+      "Monthly 1:1 strategy call",
+      "Detailed analytics dashboard",
+      "Custom branding on every clip",
+    ],
   },
 ];
 
@@ -38,6 +62,8 @@ const FAQS = [
   { q: "What if I stream less in a given month?", a: "Unused clip credits roll over for one month, so a quiet week doesn't cost you anything." },
   { q: "How do you get access to my VODs?", a: "We work with Twitch VODs, YouTube streams, or a shared Google Drive link — whatever you use. We sort it all out in onboarding." },
   { q: "Will you post directly to my channels?", a: "Yes, on Surge and Apex we handle posting end-to-end. On Spark we deliver ready-to-post files and you upload them." },
+  { q: "Do you work with small streamers under 100 viewers?", a: "Absolutely — that's actually the best time to start. Consistent clips while you're growing compounds faster than starting later." },
+  { q: "Do you understand Hindi/Hinglish content?", a: "Yes. We're built for Indian creators. We understand the content, the humor, and the community." },
 ];
 
 const MARQUEE = [
@@ -66,10 +92,7 @@ const Logo = ({ size = 32 }) => (
     alt="Creator Cuts"
     width={size}
     height={size}
-    style={{
-      objectFit: "contain",
-      display: "block"
-    }}
+    style={{ objectFit: "contain", display: "block" }}
   />
 );
 
@@ -85,18 +108,12 @@ const Reveal = ({ children, delay = 0, style = {} }) => {
     return () => obs.disconnect();
   }, []);
   return (
-    <div
-  ref={ref}
-  style={{
-    opacity: shown ? 1 : 0,
-    transform: shown ? "translateY(0)" : "translateY(32px)",
-    transition: `opacity 0.75s cubic-bezier(.16,1,.3,1) ${delay}ms,
-                 transform 0.75s cubic-bezier(.16,1,.3,1) ${delay}ms`,
-    width: "100%",
-    overflow: "visible",
-    ...style,
-  }}
->{children}</div>
+    <div ref={ref} style={{
+      opacity: shown ? 1 : 0,
+      transform: shown ? "translateY(0)" : "translateY(32px)",
+      transition: `opacity 0.75s cubic-bezier(.16,1,.3,1) ${delay}ms, transform 0.75s cubic-bezier(.16,1,.3,1) ${delay}ms`,
+      ...style,
+    }}>{children}</div>
   );
 };
 
@@ -104,7 +121,6 @@ export default function CreatorCuts() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState(null);
-  const [hoveredPlan, setHoveredPlan] = useState(null);
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
@@ -150,34 +166,41 @@ export default function CreatorCuts() {
         }
         .btn-g:hover{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.28);}
 
+        /* ── PLAN BUTTONS ── */
+        .btn-plan{
+          width:100%;display:block;text-align:center;
+          background:rgba(124,58,255,0.1);color:#A78BFA;
+          border:1px solid rgba(124,58,255,0.3);
+          padding:13px 20px;border-radius:12px;
+          font-family:'Inter',sans-serif;font-weight:700;font-size:14px;cursor:pointer;
+          transition:all .25s;text-decoration:none;
+        }
+        .btn-plan:hover{background:rgba(124,58,255,0.22);border-color:rgba(124,58,255,0.6);transform:translateY(-2px);}
+
+        .btn-plan-hero{
+          width:100%;display:block;text-align:center;
+          background:linear-gradient(135deg,#7C3AFF,#D946C9);color:#fff;
+          border:none;padding:13px 20px;border-radius:12px;
+          font-family:'Inter',sans-serif;font-weight:700;font-size:14px;cursor:pointer;
+          transition:all .25s;text-decoration:none;
+          box-shadow:0 8px 24px -8px rgba(124,58,255,0.6);
+        }
+        .btn-plan-hero:hover{transform:translateY(-2px);box-shadow:0 14px 32px -8px rgba(124,58,255,0.85);}
+
         .nav-a{color:#6E6E82;text-decoration:none;font-family:'Inter',sans-serif;font-weight:500;font-size:14.5px;transition:color .2s;}
         .nav-a:hover{color:#F0F0F6;}
 
-        /* Cards */
-        .step-card{
-          background:#111119;border:1px solid rgba(255,255,255,0.07);
-          border-radius:20px;padding:30px 24px;height:100%;
-          transition:transform .32s cubic-bezier(.16,1,.3,1),border-color .3s,box-shadow .3s;
-        }
+        .step-card{background:#111119;border:1px solid rgba(255,255,255,0.07);border-radius:20px;padding:30px 24px;height:100%;transition:transform .32s cubic-bezier(.16,1,.3,1),border-color .3s,box-shadow .3s;}
         .step-card:hover{transform:translateY(-8px);border-color:rgba(124,58,255,0.38);box-shadow:0 20px 50px -18px rgba(124,58,255,0.35);}
 
-        .why-card{
-          background:#111119;border:1px solid rgba(255,255,255,0.06);
-          border-radius:18px;padding:26px 22px;
-          transition:transform .3s cubic-bezier(.16,1,.3,1),border-color .3s;
-        }
+        .why-card{background:#111119;border:1px solid rgba(255,255,255,0.06);border-radius:18px;padding:26px 22px;transition:transform .3s cubic-bezier(.16,1,.3,1),border-color .3s;}
         .why-card:hover{transform:translateY(-6px);border-color:rgba(124,58,255,0.32);}
 
-        .plan-card{
-          background:#111119;border-radius:24px;padding:36px 30px;
-          display:flex;flex-direction:column;
-          transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s;
-        }
+        .plan-card{background:#111119;border-radius:22px;padding:32px 26px;display:flex;flex-direction:column;transition:all .35s cubic-bezier(.16,1,.3,1);}
 
         .faq-row{border-bottom:1px solid rgba(255,255,255,0.07);padding:24px 0;cursor:pointer;}
         .faq-row:hover .fq{color:#A78BFA !important;}
 
-        /* Glow orbs */
         @keyframes drift1{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(24px,-36px) scale(1.06);}}
         @keyframes drift2{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(-24px,32px) scale(1.04);}}
         @keyframes drift3{0%,100%{transform:translate(0,0);}50%{transform:translate(16px,20px);}}
@@ -187,130 +210,43 @@ export default function CreatorCuts() {
         @keyframes floaty{0%,100%{transform:translateY(0);}50%{transform:translateY(-16px);}}
         .floaty{animation:floaty 5.5s ease-in-out infinite;}
 
-        /* Marquee */
         @keyframes mq{from{transform:translateX(0);}to{transform:translateX(-50%);}}
         .mq-track{display:flex;width:max-content;animation:mq 26s linear infinite;}
         .mq-track:hover{animation-play-state:paused;}
 
-        /* Ghost number */
-        .gn{
-          -webkit-text-stroke:1.5px rgba(124,58,255,0.35);
-          color:transparent;
-          font-family:'Anton',system-ui,sans-serif;
-          text-transform:uppercase;
-        }
+        .gn{-webkit-text-stroke:1.5px rgba(124,58,255,0.35);color:transparent;font-family:'Anton',system-ui,sans-serif;text-transform:uppercase;}
+        .gtxt{background:linear-gradient(135deg,#7C3AFF,#D946C9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
 
-        /* Gradient text */
-        .gtxt{
-          background:linear-gradient(135deg,#7C3AFF,#D946C9);
-          -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-          background-clip:text;
-        }
-
-        /* Social icon button */
-        .soc{
-          width:42px;height:42px;border-radius:12px;
-          background:rgba(255,255,255,0.05);
-          border:1px solid rgba(255,255,255,0.1);
-          display:inline-flex;align-items:center;justify-content:center;
-          font-size:18px;cursor:pointer;transition:all .25s;
-          text-decoration:none;color:#F0F0F6;
-        }
+        .soc{width:42px;height:42px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);display:inline-flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;transition:all .25s;text-decoration:none;color:#F0F0F6;}
         .soc:hover{background:rgba(124,58,255,0.18);border-color:rgba(124,58,255,0.45);transform:translateY(-3px);}
-        /* Floating WhatsApp */
-.wa-float{
-  position:fixed;
-  right:24px;
-  bottom:24px;
-  width:60px;
-  height:60px;
-  border-radius:50%;
-  background:linear-gradient(135deg,#25D366,#1EBE5D);
-  color:#fff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:28px;
-  text-decoration:none;
-  box-shadow:0 10px 30px rgba(37,211,102,.35);
-  z-index:999;
-  transition:all .25s ease;
-}
 
-.wa-float:hover{
-  transform:translateY(-4px) scale(1.08);
-}
-
-        /* Mobile menu */
-        .mob-menu{
-          position:fixed;inset:0;background:rgba(8,8,14,0.97);
-          backdrop-filter:blur(24px);z-index:99;
-          display:flex;flex-direction:column;align-items:center;justify-content:center;gap:36px;
-        }
-        .mob-a{color:#F0F0F6;text-decoration:none;font-family:'Anton',sans-serif;font-size:36px;letter-spacing:0.02em;text-transform:uppercase;transition:color .2s;}
-        .mob-a:hover{color:#A78BFA;}
-
-        /* Stat pill */
-        .stat-pill{
-          background:rgba(124,58,255,0.08);
-          border:1px solid rgba(124,58,255,0.2);
-          border-radius:16px;padding:20px 28px;
-          transition:border-color .3s,background .3s;
-        }
+        .stat-pill{background:rgba(124,58,255,0.08);border:1px solid rgba(124,58,255,0.2);border-radius:16px;padding:20px 28px;transition:border-color .3s,background .3s;}
         .stat-pill:hover{background:rgba(124,58,255,0.14);border-color:rgba(124,58,255,0.4);}
 
-        /* Comparison table */
-        .cmp-row:hover td{background:rgba(124,58,255,0.06) !important;}
+        .wa-float{position:fixed;right:24px;bottom:24px;width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#25D366,#1EBE5D);color:#fff;display:flex;align-items:center;justify-content:center;font-size:28px;text-decoration:none;box-shadow:0 10px 30px rgba(37,211,102,.35);z-index:999;transition:all .25s ease;}
+        .wa-float:hover{transform:translateY(-4px) scale(1.08);}
+
+        .mob-menu{position:fixed;inset:0;background:rgba(8,8,14,0.97);backdrop-filter:blur(24px);z-index:99;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:36px;}
+        .mob-a{color:#F0F0F6;text-decoration:none;font-family:'Anton',sans-serif;font-size:36px;letter-spacing:0.02em;text-transform:uppercase;transition:color .2s;}
+        .mob-a:hover{color:#A78BFA;}
 
         @media(max-width:900px){
           .nav-links{display:none !important;}
           .ham{display:flex !important;}
           .g4{grid-template-columns:1fr 1fr !important;}
-          .g3{
-    grid-template-columns:1fr !important;
-    justify-items:center;
-    padding:0 16px !important;
-}
-
-.g3 > div{
-    width:100%;
-    max-width:380px;
-}
-
-.plan-card{
-    width:100% !important;
-    max-width:100% !important;
-    margin:0 auto;
-}
+          .g3{grid-template-columns:1fr !important;}
           .g3w{grid-template-columns:1fr 1fr !important;}
           .htitle{font-size:12vw !important;}
           .srow{flex-wrap:wrap;gap:16px !important;}
           .hero-btns{flex-wrap:wrap;}
+          .footer-grid{grid-template-columns:1fr 1fr !important;}
         }
         @media(max-width:560px){
-        .footer-contact{
-    text-align:center;
-}
-
-.footer-contact a,
-.footer-contact > div[onClick]{
-    justify-content:center;
-}
           .g4{grid-template-columns:1fr !important;}
           .g3w{grid-template-columns:1fr !important;}
           .htitle{font-size:14.5vw !important;}
-          .footer-grid{
-    grid-template-columns:1fr !important;
-    gap:32px !important;
-    text-align:center;
-}
-          .wa-float{
-  width:54px;
-  height:54px;
-  right:16px;
-  bottom:16px;
-  font-size:24px;
-}
+          .footer-grid{grid-template-columns:1fr !important;gap:32px !important;text-align:center;}
+          .wa-float{width:54px;height:54px;right:16px;bottom:16px;font-size:24px;}
         }
       `}</style>
 
@@ -361,28 +297,19 @@ export default function CreatorCuts() {
 
       {/* ── HERO ── */}
       <section style={{ position:"relative",padding:"170px clamp(20px,6vw,80px) 100px",minHeight:"96vh",display:"flex",flexDirection:"column",justifyContent:"center",overflow:"hidden" }}>
-        {/* Orbs */}
         <div className="orb1" style={{ position:"absolute",top:"-12%",right:"-6%",width:520,height:520,borderRadius:"50%",background:"radial-gradient(circle,rgba(124,58,255,0.3),transparent 70%)",filter:"blur(52px)",pointerEvents:"none" }} />
         <div className="orb2" style={{ position:"absolute",bottom:"-18%",left:"-8%",width:460,height:460,borderRadius:"50%",background:"radial-gradient(circle,rgba(217,70,201,0.2),transparent 70%)",filter:"blur(52px)",pointerEvents:"none" }} />
         <div className="orb3" style={{ position:"absolute",top:"40%",left:"40%",width:300,height:300,borderRadius:"50%",background:"radial-gradient(circle,rgba(124,58,255,0.1),transparent 70%)",filter:"blur(60px)",pointerEvents:"none" }} />
-        
 
         <Reveal>
-          <div style={{ display:"inline-flex",marginLeft:"auto",
-marginRight:"auto",alignItems:"center",gap:8,background:"rgba(124,58,255,0.1)",border:"1px solid rgba(124,58,255,0.28)",padding:"8px 18px",borderRadius:999,fontSize:12.5,fontWeight:600,color:"#A78BFA",marginBottom:30,width:"fit-content",fontFamily:"Inter,sans-serif" }}>
+          <div style={{ display:"inline-flex",marginLeft:"auto",marginRight:"auto",alignItems:"center",gap:8,background:"rgba(124,58,255,0.1)",border:"1px solid rgba(124,58,255,0.28)",padding:"8px 18px",borderRadius:999,fontSize:12.5,fontWeight:600,color:"#A78BFA",marginBottom:30,width:"fit-content",fontFamily:"Inter,sans-serif" }}>
             <span style={{ width:7,height:7,borderRadius:"50%",background:"#A78BFA",display:"inline-block",boxShadow:"0 0 8px #A78BFA",animation:"floaty 2s ease-in-out infinite" }} />
             Now onboarding streamers for July 2026
           </div>
         </Reveal>
 
         <Reveal delay={80}>
-          <h1 className="disp htitle" style={{
-  fontSize:"clamp(48px,6.8vw,96px)",
-  lineHeight:0.92,
-  maxWidth:"980px",
-  margin:"0 auto",
-  textAlign:"center"
-}}>
+          <h1 className="disp htitle" style={{ fontSize:"clamp(48px,6.8vw,96px)",lineHeight:0.92,maxWidth:"980px",margin:"0 auto",textAlign:"center" }}>
             WE CUT YOUR{" "}
             <span style={{ color:"#A78BFA",position:"relative",display:"inline-block" }}>
               STREAMS
@@ -397,30 +324,25 @@ marginRight:"auto",alignItems:"center",gap:8,background:"rgba(124,58,255,0.1)",b
         </Reveal>
 
         <Reveal delay={190}>
-          <p className="inter" style={{ fontSize:18,color:"#6E6E82",maxWidth:540,marginTop:28,lineHeight:1.7, textAlign:"center",
-    marginLeft:"auto",
-    marginRight:"auto" }}>
+          <p className="inter" style={{ fontSize:18,color:"#6E6E82",maxWidth:540,marginTop:28,lineHeight:1.7,textAlign:"center",marginLeft:"auto",marginRight:"auto" }}>
             A done-for-you clipping service built for streamers. We watch every stream, find the moments that matter, and post them across your channels — so you can just focus on going live.
           </p>
         </Reveal>
 
         <Reveal delay={310}>
-          <div className="hero-btns" style={{ display:"flex",gap:14,marginTop:36,alignItems:"center",
-    justifyContent:"center" }}>
+          <div className="hero-btns" style={{ display:"flex",gap:14,marginTop:36,alignItems:"center",justifyContent:"center" }}>
             <a className="btn-p" href="#plans">See plans & pricing →</a>
             <a className="btn-g" href={wa("Hi! I'd like to learn more about Creator Cuts.")} target="_blank" rel="noopener noreferrer">💬 Talk to us</a>
           </div>
         </Reveal>
 
-        {/* Stats */}
         <Reveal delay={440}>
-          <div className="srow" style={{ display:"flex",gap:14,marginTop:60,flexWrap:"wrap",
-    justifyContent:"center" }}>
+          <div className="srow" style={{ display:"flex",gap:14,marginTop:60,flexWrap:"wrap",justifyContent:"center" }}>
             {[
-              { val:"48hr",  sub:"Max turnaround",   note:"Spark plan" },
-              { val:"60+",   sub:"Clips per month",   note:"Apex plan"  },
-              { val:"3",     sub:"Platforms posted",  note:"Surge plan" },
-              { val:"100%",  sub:"Done for you",      note:"You just stream" },
+              { val:"48hr", sub:"Max turnaround",  note:"Spark plan" },
+              { val:"60+",  sub:"Clips per month", note:"Apex plan"  },
+              { val:"3",    sub:"Platforms posted", note:"Surge plan" },
+              { val:"100%", sub:"Done for you",    note:"You just stream" },
             ].map(s => (
               <div key={s.val} className="stat-pill">
                 <div className="disp" style={{ fontSize:30,color:"#A78BFA",lineHeight:1 }}>{s.val}</div>
@@ -430,8 +352,7 @@ marginRight:"auto",alignItems:"center",gap:8,background:"rgba(124,58,255,0.1)",b
             ))}
           </div>
         </Reveal>
-
-</section>
+      </section>
 
       {/* ── MARQUEE ── */}
       <div style={{ borderTop:"1px solid rgba(255,255,255,0.05)",borderBottom:"1px solid rgba(255,255,255,0.05)",background:"#0C0C14",padding:"15px 0",overflow:"hidden" }}>
@@ -448,15 +369,8 @@ marginRight:"auto",alignItems:"center",gap:8,background:"rgba(124,58,255,0.1)",b
       <section id="how" style={{ padding:"110px 6vw",background:"#0C0C14",borderBottom:"1px solid rgba(255,255,255,0.05)" }}>
         <Reveal>
           <div className="inter" style={{ fontSize:11.5,fontWeight:700,color:"#A78BFA",letterSpacing:"0.15em",marginBottom:12 }}>HOW IT WORKS</div>
-          <h2 className="disp" style={{ fontSize:"clamp(28px,4vw,46px)",maxWidth:640,marginBottom:14,
-
-    textAlign:"center",
-    margin:"0 auto" }}>FROM RAW STREAM<br/>TO POSTED CLIP</h2>
-          <p className="inter" style={{ fontSize:15,color:"#6E6E82",maxWidth:480,marginBottom:56,lineHeight:1.65,
-
-    textAlign:"center",
-    marginLeft:"auto",
-    marginRight:"auto" }}>Four steps. Zero effort on your end after step one.</p>
+          <h2 className="disp" style={{ fontSize:"clamp(28px,4vw,46px)",maxWidth:640,marginBottom:14,textAlign:"center",margin:"0 auto" }}>FROM RAW STREAM<br/>TO POSTED CLIP</h2>
+          <p className="inter" style={{ fontSize:15,color:"#6E6E82",maxWidth:480,marginBottom:56,lineHeight:1.65,textAlign:"center",marginLeft:"auto",marginRight:"auto" }}>Four steps. Zero effort on your end after step one.</p>
         </Reveal>
         <div className="g4" style={{ display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:18 }}>
           {STEPS.map((s,i) => (
@@ -476,23 +390,8 @@ marginRight:"auto",alignItems:"center",gap:8,background:"rgba(124,58,255,0.1)",b
       <section style={{ padding:"110px 6vw",background:"#08080E" }}>
         <Reveal>
           <div className="inter" style={{ fontSize:11.5,fontWeight:700,color:"#A78BFA",letterSpacing:"0.15em",marginBottom:12 }}>WHY US</div>
-          <h2 className="disp" style={{ fontSize:"clamp(28px,4vw,46px)",marginBottom:14, textAlign:"center",
-marginLeft:"auto",
-marginRight:"auto" }}>WHAT SETS US APART</h2>
-          <p
-  className="inter"
-  style={{
-    fontSize:15,
-    color:"#6E6E82",
-    maxWidth:480,
-    marginBottom:56,
-    lineHeight:1.65,
-
-    textAlign:"center",
-    marginLeft:"auto",
-    marginRight:"auto"
-  }}
->Most editors just cut clips. We build a short-form presence that actually grows your channel.</p>
+          <h2 className="disp" style={{ fontSize:"clamp(28px,4vw,46px)",marginBottom:14,textAlign:"center",marginLeft:"auto",marginRight:"auto" }}>WHAT SETS US APART</h2>
+          <p className="inter" style={{ fontSize:15,color:"#6E6E82",maxWidth:480,marginBottom:56,lineHeight:1.65,textAlign:"center",marginLeft:"auto",marginRight:"auto" }}>Most editors just cut clips. We build a short-form presence that actually grows your channel.</p>
         </Reveal>
         <div className="g3w" style={{ display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:16 }}>
           {WHY.map((w,i) => (
@@ -507,142 +406,95 @@ marginRight:"auto" }}>WHAT SETS US APART</h2>
         </div>
       </section>
 
-      {/* ── PLANS ── */}
-      <section
-  id="plans"
-  style={{
-    padding:"110px 12px",
-    background:"#0C0C14",
-    borderTop:"1px solid rgba(255,255,255,0.05)"
-  }}
->
+      {/* ════════════════════════════════════════
+          ── PLANS (redesigned — no pricing shown)
+          ════════════════════════════════════════ */}
+      <section id="plans" style={{ padding:"110px 6vw",background:"#0C0C14",borderTop:"1px solid rgba(255,255,255,0.05)" }}>
         <Reveal>
           <div style={{ textAlign:"center" }}>
             <div className="inter" style={{ fontSize:11.5,fontWeight:700,color:"#A78BFA",letterSpacing:"0.15em",marginBottom:12 }}>PLANS & PRICING</div>
             <h2 className="disp" style={{ fontSize:"clamp(30px,4.4vw,52px)",marginBottom:14 }}>PICK YOUR CUT</h2>
-            <p className="inter" style={{ color:"#6E6E82",maxWidth:480,margin:"0 auto",fontSize:15,lineHeight:1.65 }}>
-              Simple monthly plans. No contracts, no per-clip negotiations — cancel or upgrade as your stream grows.
+            <p className="inter" style={{ color:"#6E6E82",maxWidth:500,margin:"0 auto",fontSize:15,lineHeight:1.65 }}>
+              No pricing on the page — because every creator is different. Tell us which plan interests you and we'll give you a custom quote instantly on WhatsApp.
             </p>
           </div>
         </Reveal>
 
-        <div
-  className="g3"
-  style={{
-    display:"grid",
-    gridTemplateColumns:"repeat(3,minmax(0,1fr))",
-    gap:22,
-    marginTop:56,
-    alignItems:"stretch",
-    justifyItems:"center",
+        {/* WhatsApp pricing banner */}
+        <Reveal delay={100}>
+          <div style={{ display:"flex",alignItems:"center",justifyContent:"center",gap:10,background:"rgba(124,58,255,0.07)",border:"1px solid rgba(124,58,255,0.22)",borderRadius:12,padding:"14px 22px",marginTop:36,maxWidth:560,marginLeft:"auto",marginRight:"auto",flexWrap:"wrap" }}>
+            <span style={{ fontSize:18 }}>💬</span>
+            <span className="inter" style={{ fontSize:13.5,color:"#A78BFA",fontWeight:600 }}>Pricing is shared on WhatsApp — click any plan to get your quote instantly.</span>
+          </div>
+        </Reveal>
 
-    width:"100%",
-    maxWidth:"1400px",
-
-    margin:"0 auto",
-    boxSizing:"border-box",
-
-    padding:"0 8px"
-  }}
->
+        <div className="g3" style={{ display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:22,marginTop:48,alignItems:"stretch" }}>
           {PLANS.map((p,i) => (
-            <Reveal
-  delay={i*120}
-  key={p.name}
-  style={{
-    width:"100%",
-    height:"100%",
-    display:"flex",
-    justifyContent:"center"
-  }}
->
-              <div
-                className="plan-card"
-                onMouseEnter={() => setHoveredPlan(p.name)}
-                onMouseLeave={() => setHoveredPlan(null)}
-                style={{
-                  position:"relative",height:"100%",width:"100%",
-maxWidth:"380px",
-minWidth:"0",
-  margin:"0 auto",
-                  background: p.highlight
-                    ? "linear-gradient(160deg,rgba(124,58,255,0.18),#111119 50%)"
-                    : hoveredPlan === p.name ? "#141420" : "#111119",
-                  border: p.highlight
-                    ? "1.5px solid rgba(124,58,255,0.55)"
-                    : hoveredPlan === p.name
-                    ? "1px solid rgba(124,58,255,0.4)"
-                    : "1px solid rgba(255,255,255,0.07)",
-                  boxShadow: p.highlight || hoveredPlan === p.name
-                    ? "0 28px 64px -20px rgba(124,58,255,0.4)"
-                    : "none",
-                  transform: hoveredPlan === p.name ? "translateY(-10px)" : "translateY(0)",
-                  transition:"all .35s cubic-bezier(.16,1,.3,1)",
-                }}>
-                {p.highlight && (
-                  <div style={{ position:"absolute",top:-14,left:"50%",transform:"translateX(-50%)",background:"linear-gradient(135deg,#7C3AFF,#D946C9)",padding:"6px 18px",borderRadius:999,fontSize:11,fontWeight:700,whiteSpace:"nowrap",letterSpacing:"0.06em",fontFamily:"Inter,sans-serif" }}>
-                    ★ MOST POPULAR
+            <Reveal delay={i*120} key={p.name} style={{ height:"100%" }}>
+              <div className="plan-card" style={{
+                position:"relative",height:"100%",
+                background: p.highlight
+                  ? "linear-gradient(160deg,rgba(124,58,255,0.18),#111119 50%)"
+                  : "#111119",
+                border: p.highlight
+                  ? "1.5px solid rgba(124,58,255,0.55)"
+                  : "1px solid rgba(255,255,255,0.07)",
+                boxShadow: p.highlight ? "0 28px 64px -20px rgba(124,58,255,0.4)" : "none",
+              }}>
+
+                {/* Badge */}
+                {p.badge && (
+                  <div style={{
+                    position:"absolute",top:-14,left:"50%",transform:"translateX(-50%)",
+                    background: p.highlight ? "linear-gradient(135deg,#7C3AFF,#D946C9)" : "rgba(124,58,255,0.22)",
+                    border: p.highlight ? "none" : "1px solid rgba(124,58,255,0.4)",
+                    padding:"6px 18px",borderRadius:999,fontSize:11,fontWeight:700,
+                    whiteSpace:"nowrap",letterSpacing:"0.06em",fontFamily:"Inter,sans-serif",color:"white"
+                  }}>
+                    {p.badge}
                   </div>
                 )}
-                <div className="disp" style={{ fontSize:20,marginBottom:6 }}>{p.emoji} {p.name}</div>
-                <div className="inter" style={{ fontSize:13,color:"#6E6E82",marginBottom:22,minHeight:36,lineHeight:1.5 }}>{p.tag}</div>
-                
-                <div
-style={{
-background:"rgba(124,58,255,0.08)",
-border:"1px solid rgba(124,58,255,0.18)",
-borderRadius:10,
-padding:"12px 16px",
-marginBottom:24,
-display:"flex",
-alignItems:"center",
-gap:10
-}}
->
 
-<span style={{fontSize:20}}>✂️</span>
+                {/* Header */}
+                <div style={{ display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:6 }}>
+                  <div className="disp" style={{ fontSize:20 }}>{p.emoji} {p.name}</div>
+                  <span style={{ fontSize:11,fontWeight:700,color:"#A78BFA",background:"rgba(124,58,255,0.1)",border:"1px solid rgba(124,58,255,0.2)",padding:"3px 10px",borderRadius:6,fontFamily:"Inter,sans-serif",whiteSpace:"nowrap" }}>
+                    {p.clips.split(" / ")[0]}
+                  </span>
+                </div>
+                <div className="inter" style={{ fontSize:13,color:"#6E6E82",marginBottom:20,lineHeight:1.5 }}>{p.tag}</div>
 
-<div>
+                {/* Clips highlight box */}
+                <div style={{ background:"rgba(124,58,255,0.08)",border:"1px solid rgba(124,58,255,0.18)",borderRadius:10,padding:"12px 16px",marginBottom:22,display:"flex",alignItems:"center",gap:10 }}>
+                  <span style={{ fontSize:20 }}>✂️</span>
+                  <div>
+                    <div className="inter" style={{ fontWeight:700,fontSize:14,color:"#A78BFA" }}>{p.clips}</div>
+                    <div className="inter" style={{ fontSize:11.5,color:"#6E6E82",marginTop:2 }}>Edited, captioned & ready to post</div>
+                  </div>
+                </div>
 
-<div
-className="inter"
-style={{
-fontWeight:700,
-fontSize:14,
-color:"#A78BFA"
-}}
->
-{p.clips}
-</div>
+                <div style={{ height:1,background:"rgba(255,255,255,0.07)",marginBottom:20 }} />
 
-<div
-className="inter"
-style={{
-fontSize:11.5,
-color:"#6E6E82",
-marginTop:2
-}}
->
-Edited, captioned & ready to post
-</div>
-
-</div>
-
-</div>
-                <div style={{ height:1,background:"rgba(255,255,255,0.07)",marginBottom:22 }} />
-                <div style={{ display:"flex",flexDirection:"column",gap:12,marginBottom:28,flex:1 }}>
+                {/* Features */}
+                <div style={{ display:"flex",flexDirection:"column",gap:12,marginBottom:26,flex:1 }}>
                   {p.features.map(f => (
                     <div key={f} style={{ display:"flex",gap:10,alignItems:"flex-start" }}>
-                      <span style={{ color:"#A78BFA",flexShrink:0,marginTop:3,fontSize:12 }}>✓</span>
+                      <span style={{ color:"#A78BFA",flexShrink:0,marginTop:3,fontSize:11,background:"rgba(124,58,255,0.15)",borderRadius:"50%",width:16,height:16,display:"inline-flex",alignItems:"center",justifyContent:"center" }}>✓</span>
                       <span className="inter" style={{ fontSize:13.5,color:"#C8C8D8",lineHeight:1.5 }}>{f}</span>
                     </div>
                   ))}
                 </div>
+
+                {/* Quote CTA box */}
+                <div style={{ background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.07)",borderRadius:10,padding:"13px 16px",marginBottom:12,textAlign:"center" }}>
+                  <div className="inter" style={{ fontSize:11,color:"#5E5E72",marginBottom:3,letterSpacing:"0.08em",textTransform:"uppercase" }}>Pricing</div>
+                  <div className="inter" style={{ fontSize:14,fontWeight:700,color:"#F0F0F6" }}>Get your custom quote →</div>
+                </div>
+
                 <a
-                  className={p.highlight ? "btn-p" : "btn-g"}
+                  className={p.highlight ? "btn-plan-hero" : "btn-plan"}
                   href={wa(`Hi! I'm interested in the ${p.name} plan on Creator Cuts. Can you share the pricing?`)}
                   target="_blank" rel="noopener noreferrer"
-                  style={{ textAlign:"center",width:"100%",display:"block" }}
                 >
                   Get {p.name} pricing on WhatsApp
                 </a>
@@ -655,7 +507,7 @@ Edited, captioned & ready to post
           <p className="inter" style={{ textAlign:"center",color:"#6E6E82",fontSize:13.5,marginTop:30 }}>
             Need a custom volume or multi-streamer deal?{" "}
             <a href={wa("Hi! I'd like to discuss a custom Creator Cuts plan.")} target="_blank" rel="noopener noreferrer" style={{ color:"#A78BFA",textDecoration:"none",fontWeight:600 }}>
-              Talk to us →
+              Let's talk →
             </a>
           </p>
         </Reveal>
@@ -714,11 +566,11 @@ Edited, captioned & ready to post
               READY TO<br /><span className="gtxt">GET CUT?</span>
             </h2>
             <p className="inter" style={{ color:"#6E6E82",fontSize:17,maxWidth:420,margin:"0 auto",lineHeight:1.7 }}>
-              Join the streamers letting Creator Cuts turn their streams into their next thousand subscribers.
+              DM us on WhatsApp, tell us which plan interests you, and we'll get you started same day.
             </p>
             <div style={{ marginTop:38,display:"flex",gap:14,justifyContent:"center",flexWrap:"wrap" }}>
-              <a className="btn-p" href={wa("Hi! I'd like to book a free consult for Creator Cuts.")} target="_blank" rel="noopener noreferrer" style={{ fontSize:16,padding:"16px 36px" }}>
-                Start your free consult →
+              <a className="btn-p" href={wa("Hi! I'd like to get started with Creator Cuts. Can you share the pricing?")} target="_blank" rel="noopener noreferrer" style={{ fontSize:16,padding:"16px 36px" }}>
+                Get pricing on WhatsApp →
               </a>
               <a className="btn-g" href="#plans" style={{ fontSize:15,padding:"15px 28px" }}>
                 View plans
@@ -730,48 +582,22 @@ Edited, captioned & ready to post
 
       {/* ── FOOTER ── */}
       <footer style={{ background:"#0C0C14",borderTop:"1px solid rgba(255,255,255,0.06)",padding:"56px 6vw 90px" }}>
-        <div
-  className="footer-grid"
-  style={{
-    display:"grid",
-    gridTemplateColumns:"2fr 1fr 1fr 1.5fr",
-    gap:40,
-    marginBottom:52
-  }}
->
-
-          {/* Brand */}
+        <div className="footer-grid" style={{ display:"grid",gridTemplateColumns:"2fr 1fr 1fr 1.5fr",gap:40,marginBottom:52 }}>
           <div>
-            <div
-style={{
-display:"flex",
-alignItems:"center",
-justifyContent:"center",
-gap:9,
-marginBottom:16
-}}
->
+            <div style={{ display:"flex",alignItems:"center",gap:9,marginBottom:16 }}>
               <Logo size={26} />
               <span className="disp" style={{ fontSize:15,color:"#F0F0F6" }}>CREATOR<span style={{ color:"#A78BFA" }}>CUTS</span></span>
             </div>
-            <p className="inter" style={{ fontSize:13.5,color:"#6E6E82",lineHeight:1.75,maxWidth:260,
-margin:"0 auto 22px" }}>
+            <p className="inter" style={{ fontSize:13.5,color:"#6E6E82",lineHeight:1.75,maxWidth:260,marginBottom:22 }}>
               A done-for-you clipping agency for streamers. We clip, edit, and post — you just go live.
             </p>
-            <div
-style={{
-display:"flex",
-justifyContent:"center",
-gap:10
-}}
->
+            <div style={{ display:"flex",gap:10 }}>
               <a href="https://www.instagram.com/creatorcuts.in/" target="_blank" rel="noopener noreferrer" className="soc" title="Instagram">📸</a>
               <a href="https://www.youtube.com/@CreatorCuts-in" target="_blank" rel="noopener noreferrer" className="soc" title="YouTube">▶</a>
               <a href={wa("Hi! I'm reaching out about Creator Cuts.")} target="_blank" rel="noopener noreferrer" className="soc" title="WhatsApp">💬</a>
             </div>
           </div>
 
-          {/* Services */}
           <div>
             <div className="inter" style={{ fontSize:11,fontWeight:700,color:"#6E6E82",letterSpacing:"0.12em",marginBottom:18 }}>SERVICES</div>
             {["Stream Clipping","Shorts Editing","Thumbnail Design","Channel Strategy","Platform Posting"].map(s => (
@@ -779,57 +605,34 @@ gap:10
             ))}
           </div>
 
-          {/* Plans */}
           <div>
             <div className="inter" style={{ fontSize:11,fontWeight:700,color:"#6E6E82",letterSpacing:"0.12em",marginBottom:18 }}>PLANS</div>
-            {[["Spark","₹6,999/mo"],["Surge","₹14,999/mo"],["Apex","₹29,999/mo"]].map(([n,p]) => (
+            {["Spark","Surge","Apex"].map(n => (
               <a key={n} href="#plans" style={{ display:"block",textDecoration:"none",marginBottom:10 }}>
                 <span className="inter" style={{ fontSize:13.5,color:"#6E6E82",transition:"color .2s" }}
                   onMouseEnter={e=>e.currentTarget.style.color="#A78BFA"}
                   onMouseLeave={e=>e.currentTarget.style.color="#6E6E82"}>
-                  {n} — {p}
+                  {n}
                 </span>
               </a>
             ))}
           </div>
 
-          {/* Contact */}
-<div
-  className="footer-contact"
-  style={{
-    display:"flex",
-    flexDirection:"column",
-    alignItems:"center"
-  }}
->
+          <div>
             <div className="inter" style={{ fontSize:11,fontWeight:700,color:"#6E6E82",letterSpacing:"0.12em",marginBottom:18 }}>CONTACT US</div>
             <a href="https://www.instagram.com/creatorcuts.in/" target="_blank" rel="noopener noreferrer" style={{ display:"flex",alignItems:"center",gap:10,textDecoration:"none",marginBottom:14 }}>
               <span style={{ fontSize:16 }}>📸</span>
               <span className="inter" style={{ fontSize:13.5,color:"#6E6E82",transition:"color .2s" }}
                 onMouseEnter={e=>e.currentTarget.style.color="#A78BFA"}
-                onMouseLeave={e=>e.currentTarget.style.color="#6E6E82"}>
-                @creatorcuts.in
-              </span>
+                onMouseLeave={e=>e.currentTarget.style.color="#6E6E82"}>@creatorcuts.in</span>
             </a>
             <a href="https://www.youtube.com/@CreatorCuts-in" target="_blank" rel="noopener noreferrer" style={{ display:"flex",alignItems:"center",gap:10,textDecoration:"none",marginBottom:14 }}>
               <span style={{ fontSize:16 }}>▶</span>
               <span className="inter" style={{ fontSize:13.5,color:"#6E6E82",transition:"color .2s" }}
                 onMouseEnter={e=>e.currentTarget.style.color="#A78BFA"}
-                onMouseLeave={e=>e.currentTarget.style.color="#6E6E82"}>
-                @CreatorCuts-in
-              </span>
+                onMouseLeave={e=>e.currentTarget.style.color="#6E6E82"}>@CreatorCuts-in</span>
             </a>
-           <div
-  onClick={copyEmail}
-  style={{
-    display:"flex",
-    justifyContent:"center",
-    alignItems:"center",
-    gap:10,
-    cursor:"pointer",
-    marginBottom:14
-  }}
->
+            <div onClick={copyEmail} style={{ display:"flex",alignItems:"center",gap:10,cursor:"pointer",marginBottom:14 }}>
               <span style={{ fontSize:16 }}>📧</span>
               <span className="inter" style={{ fontSize:13.5,color: copied ? "#A78BFA" : "#6E6E82",transition:"color .2s" }}>
                 {copied ? "Copied! ✓" : "info@creatorcuts.in"}
@@ -839,31 +642,19 @@ gap:10
               <span style={{ fontSize:16 }}>💬</span>
               <span className="inter" style={{ fontSize:13.5,color:"#6E6E82",transition:"color .2s" }}
                 onMouseEnter={e=>e.currentTarget.style.color="#A78BFA"}
-                onMouseLeave={e=>e.currentTarget.style.color="#6E6E82"}>
-                WhatsApp us
-              </span>
+                onMouseLeave={e=>e.currentTarget.style.color="#6E6E82"}>WhatsApp us</span>
             </a>
           </div>
         </div>
 
-        {/* Bottom bar */}
         <div style={{ borderTop:"1px solid rgba(255,255,255,0.06)",paddingTop:24,display:"flex",justifyContent:"space-between",flexWrap:"wrap",gap:12,alignItems:"center" }}>
           <span className="inter" style={{ fontSize:12,color:"#3a3a52" }}>© 2026 Creator Cuts. All streams, sharpened.</span>
           <span className="inter" style={{ fontSize:12,color:"#3a3a52" }}>creatorcuts.in</span>
         </div>
-            </footer>
+      </footer>
 
-      {/* Floating WhatsApp Button */}
-      <a
-        className="wa-float"
-        href={wa("Hi! I'm interested in Creator Cuts.")}
-        target="_blank"
-        rel="noopener noreferrer"
-        title="Chat on WhatsApp"
-      >
-        💬
-      </a>
-
+      {/* ── FLOATING WHATSAPP ── */}
+      <a className="wa-float" href={wa("Hi! I'm interested in Creator Cuts.")} target="_blank" rel="noopener noreferrer" title="Chat on WhatsApp">💬</a>
     </div>
   );
 }
