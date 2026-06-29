@@ -125,7 +125,7 @@ export default function CreatorCuts() {
   const [hiringBar, setHiringBar] = useState(true);
 
 // Replace this with your hiring page later
-const FORM_URL = "https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform";
+const FORM_URL = "https://forms.gle/sztw45N7Svkmbvbf9";
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 30);
     window.addEventListener("scroll", fn);
