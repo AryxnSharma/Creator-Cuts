@@ -342,19 +342,26 @@ const FORM_URL = "https://forms.gle/sztw45N7Svkmbvbf9";
         @keyframes waPulse{0%,100%{box-shadow:0 10px 30px rgba(37,211,102,.35);}50%{box-shadow:0 10px 38px rgba(37,211,102,.6);}}
         .wa-float{animation:waPulse 3.2s ease-in-out infinite;}
 
+        /* ── Hiring bar (desktop default) ── */
         .hiring-bar{
           position:fixed;top:0;left:0;right:0;z-index:101;
           background:linear-gradient(90deg,#1a0a2e,#0f0520,#1a0a2e);
           border-bottom:1px solid rgba(124,58,255,.35);
-          padding:7px 6vw;display:flex;align-items:center;justify-content:center;gap:14px;
+          padding:7px 6vw;
           font-family:'Inter',sans-serif;
+          overflow:hidden;
         }
         .hiring-bar::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(124,58,255,.08),transparent);animation:shimmer 3s ease-in-out infinite;}
         @keyframes shimmer{0%,100%{opacity:0;}50%{opacity:1;}}
-        .hiring-btn{background:linear-gradient(135deg,#7C3AFF,#D946C9);color:white;padding:5px 14px;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;transition:.2s;z-index:2;animation:pulseHire 2s infinite;}
+        .hiring-bar-inner{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;gap:14px;}
+        .hiring-icon{font-size:14px;flex-shrink:0;line-height:1;}
+        .hiring-text{font-size:13px;font-weight:600;color:rgba(255,255,255,.85);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;}
+        .hiring-text-strong{color:#C4B5FD;}
+        .hiring-btn{background:linear-gradient(135deg,#7C3AFF,#D946C9);color:white;padding:5px 14px;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;transition:.2s;flex-shrink:0;white-space:nowrap;animation:pulseHire 2s infinite;}
         .hiring-btn:hover{transform:scale(1.05);}
         @keyframes pulseHire{0%,100%{box-shadow:0 0 0 rgba(124,58,255,0);}50%{box-shadow:0 0 18px rgba(124,58,255,.45);}}
-        .hiring-close{position:absolute;right:6vw;background:none;border:none;color:rgba(255,255,255,.45);font-size:16px;cursor:pointer;z-index:2;}
+        .hiring-close{background:none;border:none;color:rgba(255,255,255,.45);font-size:16px;line-height:1;cursor:pointer;flex-shrink:0;padding:2px;}
+        .hiring-close:hover{color:rgba(255,255,255,.8);}
 
         .mob-menu{position:fixed;inset:0;background:rgba(8,8,14,0.97);backdrop-filter:blur(24px);z-index:99;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:36px;}
         .mob-a{color:#F0F0F6;text-decoration:none;font-family:'Anton',sans-serif;font-size:36px;letter-spacing:0.02em;text-transform:uppercase;transition:color .2s;}
@@ -381,17 +388,29 @@ const FORM_URL = "https://forms.gle/sztw45N7Svkmbvbf9";
           .htitle{font-size:14.5vw !important;}
           .footer-grid{grid-template-columns:1fr !important;gap:32px !important;text-align:center;}
           .wa-float{width:54px;height:54px;right:16px;bottom:16px;font-size:24px;}
+
+          /* ── Hiring bar (mobile) ── */
+          .hiring-bar{padding:9px 16px;}
+          .hiring-bar-inner{justify-content:flex-start;gap:9px;}
+          .hiring-icon{font-size:13px;}
+          .hiring-text{flex:1;font-size:11.5px;}
+          .hiring-text-sub{display:none;}
+          .hiring-btn{font-size:11px;padding:6px 11px;border-radius:7px;}
+          .hiring-close{font-size:14px;}
         }
       `}</style>
 
       {hiringBar && (
         <div className="hiring-bar">
-          <span style={{fontSize:14}}>✂️</span>
-          <span className="inter" style={{fontSize:13,fontWeight:600,color:"rgba(255,255,255,.85)"}}>
-            <span style={{color:"#C4B5FD"}}>We're Hiring Editors</span> — Join the Creator Cuts team
-          </span>
-          <a className="hiring-btn" href={FORM_URL} target="_blank" rel="noopener noreferrer">Apply Now →</a>
-          <button className="hiring-close" onClick={()=>setHiringBar(false)}>✕</button>
+          <div className="hiring-bar-inner">
+            <span className="hiring-icon">✂️</span>
+            <span className="hiring-text inter">
+              <span className="hiring-text-strong">We're Hiring Editors</span>
+              <span className="hiring-text-sub"> — Join the Creator Cuts team</span>
+            </span>
+            <a className="hiring-btn" href={FORM_URL} target="_blank" rel="noopener noreferrer">Apply Now →</a>
+            <button className="hiring-close" onClick={()=>setHiringBar(false)} aria-label="Dismiss">✕</button>
+          </div>
         </div>
       )}
 
