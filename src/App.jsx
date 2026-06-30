@@ -87,23 +87,23 @@ const WHY = [
 
 // ── NEW: Social proof data ──
 const RESULTS_STATS = [
-  { val: 4200000, suffix: "+", label: "Total views generated", icon: "👁" },
-  { val: 1800, suffix: "+", label: "Clips delivered", icon: "✂️" },
-  { val: 27, suffix: "", label: "Streamers onboarded", icon: "🎮" },
-  { val: 96, suffix: "%", label: "Client retention rate", icon: "🔁" },
+  { val: 598000, suffix: "+", label: "Total views generated", icon: "👁" },
+  { val: 70, suffix: "+", label: "Clips delivered", icon: "✂️" },
+  { val: 3, suffix: "", label: "Streamers onboarded", icon: "🎮" },
+  { val: 94, suffix: "%", label: "Client retention rate", icon: "🔁" },
 ];
 
 const SAMPLE_CLIPS = [
-  { title: "\"He didn't see that coming\" — clutch 1v4", views: "812K", platform: "Reels", emoji: "🎯" },
-  { title: "Chat goes feral over IRL reaction", views: "1.1M", platform: "Shorts", emoji: "😭" },
-  { title: "Insane comeback in the final round", views: "634K", platform: "Shorts", emoji: "🔥" },
-  { title: "Streamer roasts a donator, chat loses it", views: "459K", platform: "Reels", emoji: "💀" },
+  { title: "\"He didn't see that coming\" — clutch 1v4", views: "112K", platform: "Reels", emoji: "🎯" },
+  { title: "Chat goes feral over IRL reaction", views: "98k", platform: "Shorts", emoji: "😭" },
+  { title: "Insane comeback in the final round", views: "63K", platform: "Shorts", emoji: "🔥" },
+  { title: "Streamer roasts a donator, chat loses it", views: "59K", platform: "Reels", emoji: "💀" },
 ];
 
 const TESTIMONIALS = [
   { name: "Arjun \"Vexed\" R.", game: "Valorant streamer · 14K followers", quote: "I went from posting once a month to never thinking about clips again. My Shorts views did the rest." },
   { name: "Meher K.", game: "IRL & variety · 8K followers", quote: "They actually understand Hinglish humor, which most editors completely miss. First agency that got it right." },
-  { name: "Dhruv \"Sn1per\" P.", game: "Apex Legends · 22K followers", quote: "Surge plan paid for itself in the first month. Editor knows exactly which moments chat reacts to." },
+  { name: "Dhruv \"Sn1per\" P.", game: "Entertainment · 18K followers", quote: "Surge plan paid for itself in the first month. Editor knows exactly which moments chat reacts to." },
 ];
 
 // ── Logo Image ──
