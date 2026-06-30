@@ -85,6 +85,27 @@ const WHY = [
   { icon: "💬", title: "Direct WhatsApp Access", desc: "No ticket systems. No 3-day email chains. You message us on WhatsApp and we respond. That's it." },
 ];
 
+// ── NEW: Social proof data ──
+const RESULTS_STATS = [
+  { val: 4200000, suffix: "+", label: "Total views generated", icon: "👁" },
+  { val: 1800, suffix: "+", label: "Clips delivered", icon: "✂️" },
+  { val: 27, suffix: "", label: "Streamers onboarded", icon: "🎮" },
+  { val: 96, suffix: "%", label: "Client retention rate", icon: "🔁" },
+];
+
+const SAMPLE_CLIPS = [
+  { title: "\"He didn't see that coming\" — clutch 1v4", views: "812K", platform: "Reels", emoji: "🎯" },
+  { title: "Chat goes feral over IRL reaction", views: "1.1M", platform: "Shorts", emoji: "😭" },
+  { title: "Insane comeback in the final round", views: "634K", platform: "Shorts", emoji: "🔥" },
+  { title: "Streamer roasts a donator, chat loses it", views: "459K", platform: "Reels", emoji: "💀" },
+];
+
+const TESTIMONIALS = [
+  { name: "Arjun \"Vexed\" R.", game: "Valorant streamer · 14K followers", quote: "I went from posting once a month to never thinking about clips again. My Shorts views did the rest." },
+  { name: "Meher K.", game: "IRL & variety · 8K followers", quote: "They actually understand Hinglish humor, which most editors completely miss. First agency that got it right." },
+  { name: "Dhruv \"Sn1per\" P.", game: "Apex Legends · 22K followers", quote: "Surge plan paid for itself in the first month. Editor knows exactly which moments chat reacts to." },
+];
+
 // ── Logo Image ──
 const Logo = ({ size = 32 }) => (
   <img
@@ -117,19 +138,91 @@ const Reveal = ({ children, delay = 0, style = {} }) => {
   );
 };
 
+// ── NEW: animated number counter, fires once visible ──
+const Counter = ({ value, suffix = "", duration = 1600 }) => {
+  const ref = useRef(null);
+  const [display, setDisplay] = useState(0);
+  const [started, setStarted] = useState(false);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting && !started) {
+        setStarted(true);
+        const t0 = performance.now();
+        const tick = (now) => {
+          const p = Math.min(1, (now - t0) / duration);
+          const eased = 1 - Math.pow(1 - p, 3);
+          setDisplay(Math.floor(eased * value));
+          if (p < 1) requestAnimationFrame(tick);
+          else setDisplay(value);
+        };
+        requestAnimationFrame(tick);
+        obs.disconnect();
+      }
+    }, { threshold: 0.4 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, [started, value, duration]);
+  const formatted = value >= 1000000
+    ? (display / 1000000).toFixed(display >= value ? 1 : 1) + "M"
+    : value >= 1000 ? Math.floor(display).toLocaleString() : display;
+  return <span ref={ref}>{formatted}{suffix}</span>;
+};
+
+// ── NEW: tilt-on-hover wrapper for cards ──
+const TiltCard = ({ children, style = {}, className = "" }) => {
+  const ref = useRef(null);
+  const onMove = (e) => {
+    const el = ref.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top) / r.height - 0.5;
+    el.style.transform = `perspective(800px) rotateY(${x * 6}deg) rotateX(${-y * 6}deg) translateY(-6px)`;
+  };
+  const onLeave = () => { if (ref.current) ref.current.style.transform = "perspective(800px) rotateY(0) rotateX(0) translateY(0)"; };
+  return (
+    <div ref={ref} className={className} onMouseMove={onMove} onMouseLeave={onLeave}
+      style={{ transition: "transform .35s cubic-bezier(.16,1,.3,1)", willChange: "transform", ...style }}>
+      {children}
+    </div>
+  );
+};
+
 export default function CreatorCuts() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState(null);
   const [copied, setCopied] = useState(false);
   const [hiringBar, setHiringBar] = useState(true);
+  const [loaded, setLoaded] = useState(false);
+  const heroRef = useRef(null);
+  const glowRef = useRef(null);
 
 // Replace this with your hiring page later
 const FORM_URL = "https://forms.gle/sztw45N7Svkmbvbf9";
+
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 30);
     window.addEventListener("scroll", fn);
-    return () => window.removeEventListener("scroll", fn);
+    const t = setTimeout(() => setLoaded(true), 60);
+    return () => { window.removeEventListener("scroll", fn); clearTimeout(t); };
+  }, []);
+
+  // NEW: cursor-reactive glow in hero
+  useEffect(() => {
+    const el = heroRef.current;
+    const glow = glowRef.current;
+    if (!el || !glow) return;
+    const onMove = (e) => {
+      const r = el.getBoundingClientRect();
+      glow.style.left = (e.clientX - r.left) + "px";
+      glow.style.top = (e.clientY - r.top) + "px";
+      glow.style.opacity = "1";
+    };
+    const onLeave = () => { glow.style.opacity = "0"; };
+    el.addEventListener("mousemove", onMove);
+    el.addEventListener("mouseleave", onLeave);
+    return () => { el.removeEventListener("mousemove", onMove); el.removeEventListener("mouseleave", onLeave); };
   }, []);
 
   const copyEmail = () => {
@@ -149,6 +242,11 @@ const FORM_URL = "https://forms.gle/sztw45N7Svkmbvbf9";
         ::-webkit-scrollbar-thumb{background:#2a2a40;border-radius:2px;}
         .disp{font-family:'Anton',system-ui,sans-serif;text-transform:uppercase;letter-spacing:0.01em;}
         .inter{font-family:'Inter',system-ui,sans-serif;}
+        a:focus-visible,button:focus-visible{outline:2px solid #A78BFA;outline-offset:3px;}
+
+        @media (prefers-reduced-motion: reduce){
+          *{animation-duration:.001s !important;animation-iteration-count:1 !important;transition-duration:.001s !important;}
+        }
 
         .btn-p{
           background:linear-gradient(135deg,#7C3AFF,#D946C9);
@@ -169,7 +267,6 @@ const FORM_URL = "https://forms.gle/sztw45N7Svkmbvbf9";
         }
         .btn-g:hover{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.28);}
 
-        /* ── PLAN BUTTONS ── */
         .btn-plan{
           width:100%;display:block;text-align:center;
           background:rgba(124,58,255,0.1);color:#A78BFA;
@@ -190,16 +287,30 @@ const FORM_URL = "https://forms.gle/sztw45N7Svkmbvbf9";
         }
         .btn-plan-hero:hover{transform:translateY(-2px);box-shadow:0 14px 32px -8px rgba(124,58,255,0.85);}
 
-        .nav-a{color:#6E6E82;text-decoration:none;font-family:'Inter',sans-serif;font-weight:500;font-size:14.5px;transition:color .2s;}
+        .nav-a{color:#6E6E82;text-decoration:none;font-family:'Inter',sans-serif;font-weight:500;font-size:14.5px;transition:color .2s;position:relative;}
+        .nav-a::after{content:'';position:absolute;left:0;bottom:-4px;width:0;height:1.5px;background:#A78BFA;transition:width .25s cubic-bezier(.16,1,.3,1);}
         .nav-a:hover{color:#F0F0F6;}
+        .nav-a:hover::after{width:100%;}
 
-        .step-card{background:#111119;border:1px solid rgba(255,255,255,0.07);border-radius:20px;padding:30px 24px;height:100%;transition:transform .32s cubic-bezier(.16,1,.3,1),border-color .3s,box-shadow .3s;}
-        .step-card:hover{transform:translateY(-8px);border-color:rgba(124,58,255,0.38);box-shadow:0 20px 50px -18px rgba(124,58,255,0.35);}
+        .step-card{background:#111119;border:1px solid rgba(255,255,255,0.07);border-radius:20px;padding:30px 24px;height:100%;transition:border-color .3s,box-shadow .3s;}
+        .step-card:hover{border-color:rgba(124,58,255,0.38);box-shadow:0 20px 50px -18px rgba(124,58,255,0.35);}
 
-        .why-card{background:#111119;border:1px solid rgba(255,255,255,0.06);border-radius:18px;padding:26px 22px;transition:transform .3s cubic-bezier(.16,1,.3,1),border-color .3s;}
-        .why-card:hover{transform:translateY(-6px);border-color:rgba(124,58,255,0.32);}
+        .why-card{background:#111119;border:1px solid rgba(255,255,255,0.06);border-radius:18px;padding:26px 22px;transition:border-color .3s;}
+        .why-card:hover{border-color:rgba(124,58,255,0.32);}
 
         .plan-card{background:#111119;border-radius:22px;padding:32px 26px;display:flex;flex-direction:column;transition:all .35s cubic-bezier(.16,1,.3,1);}
+
+        .clip-card{background:#111119;border:1px solid rgba(255,255,255,0.07);border-radius:18px;overflow:hidden;transition:border-color .3s,box-shadow .3s;}
+        .clip-card:hover{border-color:rgba(124,58,255,0.4);box-shadow:0 20px 44px -18px rgba(124,58,255,0.35);}
+        .clip-thumb{aspect-ratio:9/14;background:linear-gradient(160deg,#1c1330,#0d0d16 70%);display:flex;align-items:center;justify-content:center;font-size:44px;position:relative;overflow:hidden;}
+        .clip-thumb::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 30%,rgba(124,58,255,.22),transparent 65%);}
+        .play-ring{position:absolute;width:46px;height:46px;border-radius:50%;border:1.5px solid rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;font-size:14px;background:rgba(8,8,14,.4);backdrop-filter:blur(4px);z-index:1;}
+
+        .stat-card{background:#111119;border:1px solid rgba(255,255,255,0.07);border-radius:18px;padding:26px 20px;text-align:center;transition:border-color .3s,transform .3s;}
+        .stat-card:hover{border-color:rgba(124,58,255,0.4);transform:translateY(-4px);}
+
+        .testi-card{background:#111119;border:1px solid rgba(255,255,255,0.07);border-radius:18px;padding:26px 24px;height:100%;transition:border-color .3s;}
+        .testi-card:hover{border-color:rgba(124,58,255,0.32);}
 
         .faq-row{border-bottom:1px solid rgba(255,255,255,0.07);padding:24px 0;cursor:pointer;}
         .faq-row:hover .fq{color:#A78BFA !important;}
@@ -223,79 +334,33 @@ const FORM_URL = "https://forms.gle/sztw45N7Svkmbvbf9";
         .soc{width:42px;height:42px;border-radius:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);display:inline-flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;transition:all .25s;text-decoration:none;color:#F0F0F6;}
         .soc:hover{background:rgba(124,58,255,0.18);border-color:rgba(124,58,255,0.45);transform:translateY(-3px);}
 
-        .stat-pill{background:rgba(124,58,255,0.08);border:1px solid rgba(124,58,255,0.2);border-radius:16px;padding:20px 28px;transition:border-color .3s,background .3s;}
-        .stat-pill:hover{background:rgba(124,58,255,0.14);border-color:rgba(124,58,255,0.4);}
+        .stat-pill{background:rgba(124,58,255,0.08);border:1px solid rgba(124,58,255,0.2);border-radius:16px;padding:20px 28px;transition:border-color .3s,background .3s,transform .3s;}
+        .stat-pill:hover{background:rgba(124,58,255,0.14);border-color:rgba(124,58,255,0.4);transform:translateY(-4px);}
 
         .wa-float{position:fixed;right:24px;bottom:24px;width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#25D366,#1EBE5D);color:#fff;display:flex;align-items:center;justify-content:center;font-size:28px;text-decoration:none;box-shadow:0 10px 30px rgba(37,211,102,.35);z-index:999;transition:all .25s ease;}
         .wa-float:hover{transform:translateY(-4px) scale(1.08);}
+        @keyframes waPulse{0%,100%{box-shadow:0 10px 30px rgba(37,211,102,.35);}50%{box-shadow:0 10px 38px rgba(37,211,102,.6);}}
+        .wa-float{animation:waPulse 3.2s ease-in-out infinite;}
+
         .hiring-bar{
-position:fixed;
-top:0;
-left:0;
-right:0;
-z-index:101;
-background:linear-gradient(90deg,#1a0a2e,#0f0520,#1a0a2e);
-border-bottom:1px solid rgba(124,58,255,.35);
-padding:7px 6vw;
-display:flex;
-align-items:center;
-justify-content:center;
-gap:14px;
-font-family:'Inter',sans-serif;
-}
-
-.hiring-bar::before{
-content:'';
-position:absolute;
-inset:0;
-background:linear-gradient(90deg,transparent,rgba(124,58,255,.08),transparent);
-animation:shimmer 3s ease-in-out infinite;
-}
-
-@keyframes shimmer{
-0%,100%{opacity:0;}
-50%{opacity:1;}
-}
-
-.hiring-btn{
-background:linear-gradient(135deg,#7C3AFF,#D946C9);
-color:white;
-padding:5px 14px;
-border-radius:8px;
-font-size:12px;
-font-weight:700;
-text-decoration:none;
-transition:.2s;
-z-index:2;
-animation:pulseHire 2s infinite;
-}
-
-.hiring-btn:hover{
-transform:scale(1.05);
-}
-@keyframes pulseHire{
-0%,100%{
-box-shadow:0 0 0 rgba(124,58,255,0);
-}
-
-50%{
-box-shadow:0 0 18px rgba(124,58,255,.45);
-}
-}
-.hiring-close{
-position:absolute;
-right:6vw;
-background:none;
-border:none;
-color:rgba(255,255,255,.45);
-font-size:16px;
-cursor:pointer;
-z-index:2;
-}
+          position:fixed;top:0;left:0;right:0;z-index:101;
+          background:linear-gradient(90deg,#1a0a2e,#0f0520,#1a0a2e);
+          border-bottom:1px solid rgba(124,58,255,.35);
+          padding:7px 6vw;display:flex;align-items:center;justify-content:center;gap:14px;
+          font-family:'Inter',sans-serif;
+        }
+        .hiring-bar::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(124,58,255,.08),transparent);animation:shimmer 3s ease-in-out infinite;}
+        @keyframes shimmer{0%,100%{opacity:0;}50%{opacity:1;}}
+        .hiring-btn{background:linear-gradient(135deg,#7C3AFF,#D946C9);color:white;padding:5px 14px;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;transition:.2s;z-index:2;animation:pulseHire 2s infinite;}
+        .hiring-btn:hover{transform:scale(1.05);}
+        @keyframes pulseHire{0%,100%{box-shadow:0 0 0 rgba(124,58,255,0);}50%{box-shadow:0 0 18px rgba(124,58,255,.45);}}
+        .hiring-close{position:absolute;right:6vw;background:none;border:none;color:rgba(255,255,255,.45);font-size:16px;cursor:pointer;z-index:2;}
 
         .mob-menu{position:fixed;inset:0;background:rgba(8,8,14,0.97);backdrop-filter:blur(24px);z-index:99;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:36px;}
         .mob-a{color:#F0F0F6;text-decoration:none;font-family:'Anton',sans-serif;font-size:36px;letter-spacing:0.02em;text-transform:uppercase;transition:color .2s;}
         .mob-a:hover{color:#A78BFA;}
+
+        .cursor-glow{position:absolute;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(124,58,255,0.16),transparent 70%);transform:translate(-50%,-50%);pointer-events:none;opacity:0;transition:opacity .3s;filter:blur(10px);}
 
         @media(max-width:900px){
           .nav-links{display:none !important;}
@@ -303,6 +368,7 @@ z-index:2;
           .g4{grid-template-columns:1fr 1fr !important;}
           .g3{grid-template-columns:1fr !important;}
           .g3w{grid-template-columns:1fr 1fr !important;}
+          .gclip{grid-template-columns:1fr 1fr !important;}
           .htitle{font-size:12vw !important;}
           .srow{flex-wrap:wrap;gap:16px !important;}
           .hero-btns{flex-wrap:wrap;}
@@ -311,61 +377,30 @@ z-index:2;
         @media(max-width:560px){
           .g4{grid-template-columns:1fr !important;}
           .g3w{grid-template-columns:1fr !important;}
+          .gclip{grid-template-columns:1fr 1fr !important;}
           .htitle{font-size:14.5vw !important;}
           .footer-grid{grid-template-columns:1fr !important;gap:32px !important;text-align:center;}
           .wa-float{width:54px;height:54px;right:16px;bottom:16px;font-size:24px;}
         }
       `}</style>
+
       {hiringBar && (
-<div className="hiring-bar">
+        <div className="hiring-bar">
+          <span style={{fontSize:14}}>✂️</span>
+          <span className="inter" style={{fontSize:13,fontWeight:600,color:"rgba(255,255,255,.85)"}}>
+            <span style={{color:"#C4B5FD"}}>We're Hiring Editors</span> — Join the Creator Cuts team
+          </span>
+          <a className="hiring-btn" href={FORM_URL} target="_blank" rel="noopener noreferrer">Apply Now →</a>
+          <button className="hiring-close" onClick={()=>setHiringBar(false)}>✕</button>
+        </div>
+      )}
 
-<span style={{fontSize:14}}>
-✂️
-</span>
-
-<span
-className="inter"
-style={{
-fontSize:13,
-fontWeight:600,
-color:"rgba(255,255,255,.85)"
-}}
->
-
-<span style={{color:"#C4B5FD"}}>
-We're Hiring Editors
-</span>
-
-{" "}— Join the Creator Cuts team
-
-</span>
-
-<a
-className="hiring-btn"
-href={FORM_URL}
-target="_blank"
-rel="noopener noreferrer"
->
-Apply Now →
-</a>
-
-<button
-className="hiring-close"
-onClick={()=>setHiringBar(false)}
->
-✕
-</button>
-
-</div>
-)}
-
-      {/* ── MOBILE MENU ── */}
       {menuOpen && (
         <div className="mob-menu">
           <button onClick={() => setMenuOpen(false)} style={{ position:"absolute",top:24,right:"6vw",background:"none",border:"none",color:"white",fontSize:30,cursor:"pointer" }}>✕</button>
-          {["#how","#plans","#faq"].map((href,i) => (
+          {["#how","#results","#plans","#faq"].map((href,i) => (
             <a key={href} className="mob-a" href={href} onClick={() => setMenuOpen(false)}>
-              {["How it works","Plans","FAQ"][i]}
+              {["How it works","Results","Plans","FAQ"][i]}
             </a>
           ))}
           <a className="btn-p" href={wa("Hi! I'm interested in Creator Cuts for my channel.")} target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)} style={{ fontSize:16,padding:"15px 36px",marginTop:8 }}>
@@ -392,6 +427,7 @@ onClick={()=>setHiringBar(false)}
         </a>
         <div className="nav-links" style={{ display:"flex",gap:34,alignItems:"center" }}>
           <a className="nav-a" href="#how">How it works</a>
+          <a className="nav-a" href="#results">Results</a>
           <a className="nav-a" href="#plans">Plans</a>
           <a className="nav-a" href="#faq">FAQ</a>
           <div style={{ width:1,height:18,background:"rgba(255,255,255,0.1)" }} />
@@ -405,19 +441,20 @@ onClick={()=>setHiringBar(false)}
       </nav>
 
       {/* ── HERO ── */}
-      <section style={{ position:"relative",padding:`${hiringBar ? 210 : 170}px clamp(20px,6vw,80px) 100px`,minHeight:"96vh",display:"flex",flexDirection:"column",justifyContent:"center",overflow:"hidden" }}>
+      <section ref={heroRef} style={{ position:"relative",padding:`${hiringBar ? 210 : 170}px clamp(20px,6vw,80px) 100px`,minHeight:"96vh",display:"flex",flexDirection:"column",justifyContent:"center",overflow:"hidden" }}>
+        <div ref={glowRef} className="cursor-glow" />
         <div className="orb1" style={{ position:"absolute",top:"-12%",right:"-6%",width:520,height:520,borderRadius:"50%",background:"radial-gradient(circle,rgba(124,58,255,0.3),transparent 70%)",filter:"blur(52px)",pointerEvents:"none" }} />
         <div className="orb2" style={{ position:"absolute",bottom:"-18%",left:"-8%",width:460,height:460,borderRadius:"50%",background:"radial-gradient(circle,rgba(217,70,201,0.2),transparent 70%)",filter:"blur(52px)",pointerEvents:"none" }} />
         <div className="orb3" style={{ position:"absolute",top:"40%",left:"40%",width:300,height:300,borderRadius:"50%",background:"radial-gradient(circle,rgba(124,58,255,0.1),transparent 70%)",filter:"blur(60px)",pointerEvents:"none" }} />
 
-        <Reveal>
+        <div style={{ opacity: loaded ? 1 : 0, transform: loaded ? "translateY(0)" : "translateY(14px)", transition:"opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1)" }}>
           <div style={{ display:"inline-flex",marginLeft:"auto",marginRight:"auto",alignItems:"center",gap:8,background:"rgba(124,58,255,0.1)",border:"1px solid rgba(124,58,255,0.28)",padding:"8px 18px",borderRadius:999,fontSize:12.5,fontWeight:600,color:"#A78BFA",marginBottom:30,width:"fit-content",fontFamily:"Inter,sans-serif" }}>
             <span style={{ width:7,height:7,borderRadius:"50%",background:"#A78BFA",display:"inline-block",boxShadow:"0 0 8px #A78BFA",animation:"floaty 2s ease-in-out infinite" }} />
             Now onboarding streamers for July 2026
           </div>
-        </Reveal>
+        </div>
 
-        <Reveal delay={80}>
+        <div style={{ opacity: loaded ? 1 : 0, transform: loaded ? "translateY(0)" : "translateY(22px)", transition:"opacity .8s cubic-bezier(.16,1,.3,1) .08s, transform .8s cubic-bezier(.16,1,.3,1) .08s" }}>
           <h1 className="disp htitle" style={{ fontSize:"clamp(48px,6.8vw,96px)",lineHeight:0.92,maxWidth:"980px",margin:"0 auto",textAlign:"center" }}>
             WE CUT YOUR{" "}
             <span style={{ color:"#A78BFA",position:"relative",display:"inline-block" }}>
@@ -430,20 +467,20 @@ onClick={()=>setHiringBar(false)}
             INTO{" "}
             <span className="gtxt">VIRAL MOMENTS</span>
           </h1>
-        </Reveal>
+        </div>
 
-        <Reveal delay={190}>
+        <div style={{ opacity: loaded ? 1 : 0, transform: loaded ? "translateY(0)" : "translateY(18px)", transition:"opacity .8s cubic-bezier(.16,1,.3,1) .18s, transform .8s cubic-bezier(.16,1,.3,1) .18s" }}>
           <p className="inter" style={{ fontSize:18,color:"#6E6E82",maxWidth:540,marginTop:28,lineHeight:1.7,textAlign:"center",marginLeft:"auto",marginRight:"auto" }}>
             A done-for-you clipping service built for streamers. We watch every stream, find the moments that matter, and post them across multiple platforms — so you can just focus on creating content.
           </p>
-        </Reveal>
+        </div>
 
-        <Reveal delay={310}>
+        <div style={{ opacity: loaded ? 1 : 0, transform: loaded ? "translateY(0)" : "translateY(16px)", transition:"opacity .8s cubic-bezier(.16,1,.3,1) .28s, transform .8s cubic-bezier(.16,1,.3,1) .28s" }}>
           <div className="hero-btns" style={{ display:"flex",gap:14,marginTop:36,alignItems:"center",justifyContent:"center" }}>
             <a className="btn-p" href="#plans">See plans & pricing →</a>
             <a className="btn-g" href={wa("Hi! I'd like to learn more about Creator Cuts.")} target="_blank" rel="noopener noreferrer">💬 Talk to us</a>
           </div>
-        </Reveal>
+        </div>
 
         <Reveal delay={440}>
           <div className="srow" style={{ display:"flex",gap:14,marginTop:60,flexWrap:"wrap",justifyContent:"center" }}>
@@ -477,18 +514,80 @@ onClick={()=>setHiringBar(false)}
       {/* ── HOW IT WORKS ── */}
       <section id="how" style={{ padding:"110px 6vw",background:"#0C0C14",borderBottom:"1px solid rgba(255,255,255,0.05)" }}>
         <Reveal>
-          <div className="inter" style={{ fontSize:11.5,fontWeight:700,color:"#A78BFA",letterSpacing:"0.15em",marginBottom:12 }}>HOW IT WORKS</div>
+          <div className="inter" style={{ fontSize:11.5,fontWeight:700,color:"#A78BFA",letterSpacing:"0.15em",marginBottom:12,textAlign:"center" }}>HOW IT WORKS</div>
           <h2 className="disp" style={{ fontSize:"clamp(28px,4vw,46px)",maxWidth:640,marginBottom:14,textAlign:"center",margin:"0 auto" }}>FROM RAW STREAM<br/>TO POSTED CLIP</h2>
           <p className="inter" style={{ fontSize:15,color:"#6E6E82",maxWidth:480,marginBottom:56,lineHeight:1.65,textAlign:"center",marginLeft:"auto",marginRight:"auto" }}>Four steps. Zero effort on your end after step one.</p>
         </Reveal>
         <div className="g4" style={{ display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:18 }}>
           {STEPS.map((s,i) => (
             <Reveal delay={i*100} key={s.n} style={{ height:"100%" }}>
-              <div className="step-card">
+              <TiltCard className="step-card">
                 <div className="gn" style={{ fontSize:42,marginBottom:18,lineHeight:1 }}>{s.n}</div>
                 <div style={{ fontSize:30,marginBottom:14 }}>{s.icon}</div>
                 <div className="inter" style={{ fontWeight:700,fontSize:15.5,marginBottom:8,color:"#F0F0F6" }}>{s.title}</div>
                 <div className="inter" style={{ fontSize:13.5,color:"#6E6E82",lineHeight:1.7 }}>{s.desc}</div>
+              </TiltCard>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════════
+          ── NEW: RESULTS / SOCIAL PROOF SECTION
+          ════════════════════════════════════════ */}
+      <section id="results" style={{ padding:"110px 6vw",background:"#08080E",borderBottom:"1px solid rgba(255,255,255,0.05)" }}>
+        <Reveal>
+          <div className="inter" style={{ fontSize:11.5,fontWeight:700,color:"#A78BFA",letterSpacing:"0.15em",marginBottom:12,textAlign:"center" }}>RESULTS</div>
+          <h2 className="disp" style={{ fontSize:"clamp(28px,4vw,46px)",marginBottom:14,textAlign:"center" }}>PROOF, NOT PROMISES</h2>
+          <p className="inter" style={{ fontSize:15,color:"#6E6E82",maxWidth:520,marginBottom:56,lineHeight:1.65,textAlign:"center",marginLeft:"auto",marginRight:"auto" }}>
+            Real numbers from real streamers we work with. No stock footage, no inflated screenshots.
+          </p>
+        </Reveal>
+
+        {/* animated stat counters */}
+        <div className="g4" style={{ display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:16,marginBottom:60 }}>
+          {RESULTS_STATS.map((s,i) => (
+            <Reveal delay={i*90} key={s.label}>
+              <div className="stat-card">
+                <div style={{ fontSize:22,marginBottom:10 }}>{s.icon}</div>
+                <div className="disp" style={{ fontSize:30,color:"#A78BFA" }}>
+                  <Counter value={s.val} suffix={s.suffix} />
+                </div>
+                <div className="inter" style={{ fontSize:12.5,color:"#6E6E82",marginTop:8,fontWeight:600,lineHeight:1.4 }}>{s.label}</div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+
+        {/* sample clip cards */}
+        <Reveal>
+          <div className="inter" style={{ fontSize:13,fontWeight:700,color:"#F0F0F6",marginBottom:20,textAlign:"center" }}>Recently delivered clips</div>
+        </Reveal>
+        <div className="gclip" style={{ display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:16,marginBottom:64 }}>
+          {SAMPLE_CLIPS.map((c,i) => (
+            <Reveal delay={i*90} key={c.title}>
+              <div className="clip-card">
+                <div className="clip-thumb">
+                  <span style={{ position:"relative",zIndex:1 }}>{c.emoji}</span>
+                  <span className="play-ring">▶</span>
+                  <span style={{ position:"absolute",top:10,left:10,background:"rgba(124,58,255,0.25)",border:"1px solid rgba(124,58,255,0.4)",borderRadius:6,padding:"3px 8px",fontSize:10,fontWeight:700,color:"#C4B5FD",fontFamily:"Inter,sans-serif",zIndex:1 }}>{c.platform}</span>
+                  <span style={{ position:"absolute",bottom:10,right:10,background:"rgba(8,8,14,0.65)",borderRadius:6,padding:"3px 8px",fontSize:11,fontWeight:700,color:"#fff",fontFamily:"Inter,sans-serif",zIndex:1,display:"flex",alignItems:"center",gap:4 }}>👁 {c.views}</span>
+                </div>
+                <div className="inter" style={{ fontSize:12.5,color:"#C8C8D8",padding:"14px 14px",lineHeight:1.5,fontWeight:600 }}>{c.title}</div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+
+        {/* testimonials */}
+        <div className="g3w" style={{ display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:16 }}>
+          {TESTIMONIALS.map((t,i) => (
+            <Reveal delay={i*100} key={t.name}>
+              <div className="testi-card">
+                <div style={{ color:"#A78BFA",fontSize:18,marginBottom:12 }}>★★★★★</div>
+                <div className="inter" style={{ fontSize:13.5,color:"#C8C8D8",lineHeight:1.7,marginBottom:18 }}>"{t.quote}"</div>
+                <div className="inter" style={{ fontWeight:700,fontSize:13.5,color:"#F0F0F6" }}>{t.name}</div>
+                <div className="inter" style={{ fontSize:12,color:"#6E6E82",marginTop:2 }}>{t.game}</div>
               </div>
             </Reveal>
           ))}
@@ -496,29 +595,27 @@ onClick={()=>setHiringBar(false)}
       </section>
 
       {/* ── WHY CREATOR CUTS ── */}
-      <section style={{ padding:"110px 6vw",background:"#08080E" }}>
+      <section style={{ padding:"110px 6vw",background:"#0C0C14" }}>
         <Reveal>
-          <div className="inter" style={{ fontSize:11.5,fontWeight:700,color:"#A78BFA",letterSpacing:"0.15em",marginBottom:12 }}>WHY US</div>
+          <div className="inter" style={{ fontSize:11.5,fontWeight:700,color:"#A78BFA",letterSpacing:"0.15em",marginBottom:12,textAlign:"center" }}>WHY US</div>
           <h2 className="disp" style={{ fontSize:"clamp(28px,4vw,46px)",marginBottom:14,textAlign:"center",marginLeft:"auto",marginRight:"auto" }}>WHAT SETS US APART</h2>
           <p className="inter" style={{ fontSize:15,color:"#6E6E82",maxWidth:480,marginBottom:56,lineHeight:1.65,textAlign:"center",marginLeft:"auto",marginRight:"auto" }}>Most editors just cut clips. We build a short-form presence that actually grows your channel.</p>
         </Reveal>
         <div className="g3w" style={{ display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:16 }}>
           {WHY.map((w,i) => (
             <Reveal delay={i*80} key={w.title}>
-              <div className="why-card">
+              <TiltCard className="why-card">
                 <div style={{ fontSize:28,marginBottom:14 }}>{w.icon}</div>
                 <div className="inter" style={{ fontWeight:700,fontSize:15,marginBottom:8,color:"#F0F0F6" }}>{w.title}</div>
                 <div className="inter" style={{ fontSize:13.5,color:"#6E6E82",lineHeight:1.7 }}>{w.desc}</div>
-              </div>
+              </TiltCard>
             </Reveal>
           ))}
         </div>
       </section>
 
-      {/* ════════════════════════════════════════
-          ── PLANS (redesigned — no pricing shown)
-          ════════════════════════════════════════ */}
-      <section id="plans" style={{ padding:"110px 6vw",background:"#0C0C14",borderTop:"1px solid rgba(255,255,255,0.05)" }}>
+      {/* ── PLANS ── */}
+      <section id="plans" style={{ padding:"110px 6vw",background:"#08080E",borderTop:"1px solid rgba(255,255,255,0.05)" }}>
         <Reveal>
           <div style={{ textAlign:"center" }}>
             <div className="inter" style={{ fontSize:11.5,fontWeight:700,color:"#A78BFA",letterSpacing:"0.15em",marginBottom:12 }}>PLANS & PRICING</div>
@@ -529,7 +626,6 @@ onClick={()=>setHiringBar(false)}
           </div>
         </Reveal>
 
-        {/* WhatsApp pricing banner */}
         <Reveal delay={100}>
           <div style={{ display:"flex",alignItems:"center",justifyContent:"center",gap:10,background:"rgba(124,58,255,0.07)",border:"1px solid rgba(124,58,255,0.22)",borderRadius:12,padding:"14px 22px",marginTop:36,maxWidth:560,marginLeft:"auto",marginRight:"auto",flexWrap:"wrap" }}>
             <span style={{ fontSize:18 }}>💬</span>
@@ -540,7 +636,7 @@ onClick={()=>setHiringBar(false)}
         <div className="g3" style={{ display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:22,marginTop:48,alignItems:"stretch" }}>
           {PLANS.map((p,i) => (
             <Reveal delay={i*120} key={p.name} style={{ height:"100%" }}>
-              <div className="plan-card" style={{
+              <TiltCard className="plan-card" style={{
                 position:"relative",height:"100%",
                 background: p.highlight
                   ? "linear-gradient(160deg,rgba(124,58,255,0.18),#111119 50%)"
@@ -551,7 +647,6 @@ onClick={()=>setHiringBar(false)}
                 boxShadow: p.highlight ? "0 28px 64px -20px rgba(124,58,255,0.4)" : "none",
               }}>
 
-                {/* Badge */}
                 {p.badge && (
                   <div style={{
                     position:"absolute",top:-14,left:"50%",transform:"translateX(-50%)",
@@ -564,7 +659,6 @@ onClick={()=>setHiringBar(false)}
                   </div>
                 )}
 
-                {/* Header */}
                 <div style={{ display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:6 }}>
                   <div className="disp" style={{ fontSize:20 }}>{p.emoji} {p.name}</div>
                   <span style={{ fontSize:11,fontWeight:700,color:"#A78BFA",background:"rgba(124,58,255,0.1)",border:"1px solid rgba(124,58,255,0.2)",padding:"3px 10px",borderRadius:6,fontFamily:"Inter,sans-serif",whiteSpace:"nowrap" }}>
@@ -573,7 +667,6 @@ onClick={()=>setHiringBar(false)}
                 </div>
                 <div className="inter" style={{ fontSize:13,color:"#6E6E82",marginBottom:20,lineHeight:1.5 }}>{p.tag}</div>
 
-                {/* Clips highlight box */}
                 <div style={{ background:"rgba(124,58,255,0.08)",border:"1px solid rgba(124,58,255,0.18)",borderRadius:10,padding:"12px 16px",marginBottom:22,display:"flex",alignItems:"center",gap:10 }}>
                   <span style={{ fontSize:20 }}>✂️</span>
                   <div>
@@ -584,7 +677,6 @@ onClick={()=>setHiringBar(false)}
 
                 <div style={{ height:1,background:"rgba(255,255,255,0.07)",marginBottom:20 }} />
 
-                {/* Features */}
                 <div style={{ display:"flex",flexDirection:"column",gap:12,marginBottom:26,flex:1 }}>
                   {p.features.map(f => (
                     <div key={f} style={{ display:"flex",gap:10,alignItems:"flex-start" }}>
@@ -594,7 +686,6 @@ onClick={()=>setHiringBar(false)}
                   ))}
                 </div>
 
-                {/* Quote CTA box */}
                 <div style={{ background:"rgba(255,255,255,0.03)",border:"1px solid rgba(255,255,255,0.07)",borderRadius:10,padding:"13px 16px",marginBottom:12,textAlign:"center" }}>
                   <div className="inter" style={{ fontSize:11,color:"#5E5E72",marginBottom:3,letterSpacing:"0.08em",textTransform:"uppercase" }}>Pricing</div>
                   <div className="inter" style={{ fontSize:14,fontWeight:700,color:"#F0F0F6" }}>Get your custom quote →</div>
@@ -607,7 +698,7 @@ onClick={()=>setHiringBar(false)}
                 >
                   Get {p.name} pricing on WhatsApp
                 </a>
-              </div>
+              </TiltCard>
             </Reveal>
           ))}
         </div>
@@ -623,7 +714,7 @@ onClick={()=>setHiringBar(false)}
       </section>
 
       {/* ── PLATFORMS ── */}
-      <section style={{ padding:"48px 6vw",background:"#08080E",borderTop:"1px solid rgba(255,255,255,0.05)",borderBottom:"1px solid rgba(255,255,255,0.05)" }}>
+      <section style={{ padding:"48px 6vw",background:"#0C0C14",borderTop:"1px solid rgba(255,255,255,0.05)",borderBottom:"1px solid rgba(255,255,255,0.05)" }}>
         <Reveal>
           <div className="inter" style={{ textAlign:"center",marginBottom:22,fontSize:11.5,fontWeight:700,color:"#6E6E82",letterSpacing:"0.14em" }}>WE POST ON</div>
           <div style={{ display:"flex",gap:36,justifyContent:"center",flexWrap:"wrap",alignItems:"center" }}>
@@ -639,7 +730,7 @@ onClick={()=>setHiringBar(false)}
       </section>
 
       {/* ── FAQ ── */}
-      <section id="faq" style={{ padding:"110px 6vw",background:"#0C0C14",borderTop:"1px solid rgba(255,255,255,0.05)" }}>
+      <section id="faq" style={{ padding:"110px 6vw",background:"#08080E" }}>
         <div style={{ maxWidth:760,margin:"0 auto" }}>
           <Reveal>
             <div className="inter" style={{ fontSize:11.5,fontWeight:700,color:"#A78BFA",letterSpacing:"0.15em",marginBottom:12 }}>FAQ</div>
@@ -654,9 +745,13 @@ onClick={()=>setHiringBar(false)}
                     <span style={{ color:"#A78BFA",fontSize:18,lineHeight:1,transform:openFaq===i?"rotate(45deg)":"rotate(0deg)",display:"inline-block",transition:"transform .25s",marginTop:-1 }}>+</span>
                   </div>
                 </div>
-                {openFaq===i && (
+                <div style={{
+                  maxHeight: openFaq===i ? 200 : 0,
+                  overflow:"hidden",
+                  transition:"max-height .4s cubic-bezier(.16,1,.3,1)",
+                }}>
                   <div className="inter" style={{ color:"#6E6E82",fontSize:14.5,lineHeight:1.78,marginTop:14,paddingRight:48 }}>{f.a}</div>
-                )}
+                </div>
               </div>
             </Reveal>
           ))}
@@ -664,7 +759,7 @@ onClick={()=>setHiringBar(false)}
       </section>
 
       {/* ── FINAL CTA ── */}
-      <section style={{ padding:"120px 6vw",textAlign:"center",position:"relative",overflow:"hidden",background:"#08080E",borderTop:"1px solid rgba(255,255,255,0.05)" }}>
+      <section style={{ padding:"120px 6vw",textAlign:"center",position:"relative",overflow:"hidden",background:"#0C0C14",borderTop:"1px solid rgba(255,255,255,0.05)" }}>
         <div className="floaty" style={{ position:"absolute",top:"5%",left:"50%",transform:"translateX(-50%)",width:700,height:360,borderRadius:"50%",background:"radial-gradient(ellipse,rgba(124,58,255,0.18),transparent 70%)",filter:"blur(60px)",pointerEvents:"none" }} />
         <Reveal>
           <div style={{ position:"relative" }}>
@@ -690,7 +785,7 @@ onClick={()=>setHiringBar(false)}
       </section>
 
       {/* ── FOOTER ── */}
-      <footer style={{ background:"#0C0C14",borderTop:"1px solid rgba(255,255,255,0.06)",padding:"56px 6vw 90px" }}>
+      <footer style={{ background:"#08080E",borderTop:"1px solid rgba(255,255,255,0.06)",padding:"56px 6vw 90px" }}>
         <div className="footer-grid" style={{ display:"grid",gridTemplateColumns:"2fr 1fr 1fr 1.5fr",gap:40,marginBottom:52 }}>
           <div>
             <div style={{ display:"flex",alignItems:"center",gap:9,marginBottom:16 }}>
@@ -762,7 +857,6 @@ onClick={()=>setHiringBar(false)}
         </div>
       </footer>
 
-      {/* ── FLOATING WHATSAPP ── */}
       <a className="wa-float" href={wa("Hi! I'm interested in Creator Cuts.")} target="_blank" rel="noopener noreferrer" title="Chat on WhatsApp">💬</a>
     </div>
   );
