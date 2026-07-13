@@ -77,12 +77,12 @@ const MARQUEE = [
 ];
 
 const WHY = [
-  { icon: "🎯", title: "Moment Detection", desc: "We watch for chat spikes, big plays, funny reactions, emotional moments — the stuff that actually performs, not random cuts." },
-  { icon: "⚡", title: "Platform-Native Editing", desc: "Shorts pacing ≠ TikTok pacing ≠ Reels pacing. Every clip is rebuilt for its platform from scratch." },
-  { icon: "🔁", title: "Consistent Output", desc: "No more posting once a month and going silent. Consistent clips = consistent algorithmic push = consistent growth." },
-  { icon: "📊", title: "Performance Feedback", desc: "We track what clips perform and adjust the strategy. Your editing evolves as your audience grows." },
-  { icon: "🤝", title: "Streamer-First", desc: "Built specifically for streamers — gaming, IRL, variety. Not a generic video agency that clips everything the same way." },
-  { icon: "💬", title: "Direct WhatsApp Access", desc: "No ticket systems. No 3-day email chains. You message us on WhatsApp and we respond. That's it." },
+  { icon: "🎯", title: "We know what to cut", desc: "Chat spikes, big plays, funny reactions, emotional moments — we look for the stuff that actually performs, not just random highlights." },
+  { icon: "⚡", title: "Edited for each platform", desc: "Shorts pacing isn't Reels pacing. Every clip gets rebuilt for where it's going, not just resized." },
+  { icon: "🔁", title: "Consistency, not one-offs", desc: "No more posting once a month and going quiet. Regular clips mean the algorithm keeps pushing you, not just your best week." },
+  { icon: "📊", title: "We watch what works", desc: "We track how clips perform and adjust from there. Your editing gets sharper as your audience grows." },
+  { icon: "🤝", title: "Built for streamers", desc: "Gaming, IRL, variety — this isn't a generic agency clipping everything the same way. We work the way streamers actually need." },
+  { icon: "💬", title: "You just message us", desc: "No ticket systems, no three-day email chains. You text us on WhatsApp and we reply. That's the whole process." },
 ];
 
 // ── NEW: Social proof data ──
@@ -475,22 +475,22 @@ const FORM_URL = "https://forms.gle/sztw45N7Svkmbvbf9";
 
         <div style={{ opacity: loaded ? 1 : 0, transform: loaded ? "translateY(0)" : "translateY(22px)", transition:"opacity .8s cubic-bezier(.16,1,.3,1) .08s, transform .8s cubic-bezier(.16,1,.3,1) .08s" }}>
           <h1 className="disp htitle" style={{ fontSize:"clamp(48px,6.8vw,96px)",lineHeight:0.92,maxWidth:"980px",margin:"0 auto",textAlign:"center" }}>
-            WE CUT YOUR{" "}
+            YOUR STREAMS,{" "}
             <span style={{ color:"#A78BFA",position:"relative",display:"inline-block" }}>
-              STREAMS
+              CLIPPED
               <svg style={{ position:"absolute",bottom:-6,left:0,width:"100%",height:6 }} viewBox="0 0 200 6" preserveAspectRatio="none">
                 <path d="M0 5 Q50 0 100 5 Q150 10 200 5" fill="none" stroke="#7C3AFF" strokeWidth="2" opacity="0.6"/>
               </svg>
             </span>
             <br />
-            INTO{" "}
-            <span className="gtxt">VIRAL MOMENTS</span>
+            AND {" "}
+            <span className="gtxt">POSTED WHILE YOU SLEEP</span>
           </h1>
         </div>
 
         <div style={{ opacity: loaded ? 1 : 0, transform: loaded ? "translateY(0)" : "translateY(18px)", transition:"opacity .8s cubic-bezier(.16,1,.3,1) .18s, transform .8s cubic-bezier(.16,1,.3,1) .18s" }}>
           <p className="inter" style={{ fontSize:18,color:"#6E6E82",maxWidth:540,marginTop:28,lineHeight:1.7,textAlign:"center",marginLeft:"auto",marginRight:"auto" }}>
-            A done-for-you clipping service built for streamers. We watch every stream, find the moments that matter, and post them across multiple platforms — so you can just focus on creating content.
+            You go live, we handle the rest — watching every stream, finding what's worth posting, and putting it out across your platforms. No editing software, no uploading, no thinking about it.
           </p>
         </div>
 
