@@ -1,4 +1,7 @@
 import { useState, useEffect, useRef } from "react";
+import { Routes, Route } from "react-router-dom";
+import Workspace from "./pages/Workspace.jsx";
+import WorkspaceDashboard from "./pages/WorkspaceDashboard.jsx";
 
 const WHATSAPP = "919473929150";
 const wa = (msg) => `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
@@ -188,7 +191,7 @@ const TiltCard = ({ children, style = {}, className = "" }) => {
   );
 };
 
-export default function CreatorCuts() {
+function CreatorCuts() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState(null);
@@ -878,5 +881,17 @@ const FORM_URL = "https://forms.gle/sztw45N7Svkmbvbf9";
 
       <a className="wa-float" href={wa("Hi! I'm interested in Creator Cuts.")} target="_blank" rel="noopener noreferrer" title="Chat on WhatsApp">💬</a>
     </div>
+  );
+}
+export default function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<CreatorCuts />} />
+      <Route path="/workspace" element={<Workspace />} />
+      <Route
+        path="/workspace/:channelName"
+        element={<WorkspaceDashboard />}
+      />
+    </Routes>
   );
 }
