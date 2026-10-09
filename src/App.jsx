@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, Fragment } from "react";
 
 /* ═══════════════════════════════════════════════════════════════
    CREATORCUTS — Hyper-3D rebuild
@@ -107,6 +107,9 @@ ul,ol{list-style:none}
 :focus-visible{outline:2px solid var(--vi2);outline-offset:3px;border-radius:8px}
 section[id]{scroll-margin-top:96px}
 
+.skiplink{position:fixed;left:16px;top:-60px;z-index:900;padding:12px 18px;border-radius:12px;background:#fff;color:#0a0a10;font-weight:700;font-size:14px;transition:top .3s var(--ease)}
+.skiplink:focus{top:12px}
+main:focus{outline:none}
 .cc{position:relative;min-height:100vh;overflow-x:clip;background:var(--bg)}
 .wrap{width:100%;max-width:1280px;margin:0 auto;padding:0 clamp(20px,5vw,56px);position:relative;z-index:2}
 
@@ -192,11 +195,10 @@ section[id]{scroll-margin-top:96px}
 .hire{position:fixed;top:0;left:0;right:0;z-index:210;height:36px;display:flex;align-items:center;justify-content:center;gap:14px;padding:0 44px;
   background:rgba(9,9,13,.78);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--ln);font-size:12.5px;color:#d6d6de}
 .hire strong{color:var(--vi2);font-weight:600}
-.hire a.ap{font-weight:600;color:#fff;padding:3px 11px;border-radius:999px;background:rgba(139,92,255,.22);border:1px solid rgba(139,92,255,.45);white-space:nowrap}
+.hire a.ap{font-weight:600;color:#fff;padding:6px 13px;line-height:1.1;border-radius:999px;background:rgba(139,92,255,.22);border:1px solid rgba(139,92,255,.45);white-space:nowrap}
 .hire a.ap:hover{background:rgba(139,92,255,.38)}
-.hire .x{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:26px;height:26px;border-radius:50%;background:none;border:0;color:var(--mu);cursor:pointer;font-size:14px}
+.hire .x{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:34px;height:34px;border-radius:50%;background:none;border:0;color:var(--mu);cursor:pointer;font-size:14px}
 .hire .x:hover{color:#fff;background:rgba(255,255,255,.08)}
-.hire .sub{color:var(--mu)}
 
 /* ── nav ── */
 .nav{position:fixed;left:50%;z-index:200;transform:translateX(-50%);width:min(880px,calc(100% - 28px));transition:top .5s var(--ease),width .5s var(--ease)}
@@ -206,6 +208,8 @@ section[id]{scroll-margin-top:96px}
 .nav.sc .nav-in{height:52px;background:rgba(12,12,18,.72);backdrop-filter:blur(34px) saturate(170%);-webkit-backdrop-filter:blur(34px) saturate(170%);
   box-shadow:0 18px 40px -14px rgba(0,0,0,.85),inset 0 1px 0 rgba(255,255,255,.08);border-color:rgba(255,255,255,.1)}
 .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:14px;letter-spacing:.06em;margin-right:auto}
+.brand{position:relative}
+.brand::after{content:'';position:absolute;inset:-9px -8px}
 .brand em{font-style:normal;color:var(--vi2)}
 .logo-i{display:block;object-fit:contain}
 .logo-fb{display:grid;place-items:center;border-radius:8px;background:linear-gradient(135deg,var(--vi),var(--cy));color:#07070A;font-weight:900}
@@ -348,6 +352,188 @@ section[id]{scroll-margin-top:96px}
 .en.done .ck{background:var(--cy)}
 
 .num{font-variant-numeric:tabular-nums}
+/* ── plan details layer ── */
+html.locked .rail{opacity:0;pointer-events:none}
+.more{align-self:center;background:none;border:0;color:var(--mu);font-size:13.5px;font-weight:550;cursor:pointer;padding:4px 8px;margin-top:-6px;transition:color .25s}
+.more:hover{color:#fff}
+.more span{display:inline-block;transition:transform .35s var(--ease)}
+.more:hover span{transform:translateX(4px)}
+.ps{position:fixed;inset:0;z-index:700;visibility:hidden;transition:visibility 0s .6s}
+.ps.o{visibility:visible;transition:visibility 0s}
+.ps-bd{position:absolute;inset:0;background:rgba(3,3,6,.62);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);opacity:0;transition:opacity .5s ease}
+.ps.o .ps-bd{opacity:1}
+.ps-p{position:absolute;top:12px;right:12px;bottom:12px;width:min(640px,calc(100% - 24px));border-radius:30px;display:flex;flex-direction:column;overflow:hidden;transform:translateX(calc(100% + 30px));transition:transform .75s var(--ease);background:linear-gradient(170deg,rgba(24,20,40,.96),rgba(10,9,18,.97))!important}
+.ps.o .ps-p{transform:none}
+.ps-h{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 16px 14px 20px;border-bottom:1px solid var(--ln);flex:none}
+.ps-tabs{display:flex;gap:4px;padding:4px;border-radius:99px;background:rgba(255,255,255,.05);border:1px solid var(--ln)}
+.ps-tabs button{height:34px;padding:0 16px;border-radius:99px;border:0;background:transparent;color:var(--mu);font-size:13.5px;font-weight:600;cursor:pointer;transition:background .35s var(--ease),color .25s}
+.ps-tabs button:hover{color:#fff}
+.ps-tabs button.on{background:#fff;color:#0a0a10}
+.ps-x{position:relative;width:40px;height:40px;border-radius:50%;border:1px solid var(--ln);background:rgba(255,255,255,.05);cursor:pointer;flex:none;transition:background .25s,transform .4s var(--ease)}
+.ps-x:hover{background:rgba(255,255,255,.12);transform:rotate(90deg)}
+.ps-x i{position:absolute;left:50%;top:50%;width:16px;height:2px;border-radius:2px;background:#fff;transform:translate(-50%,-50%) rotate(45deg)}
+.ps-x i+i{transform:translate(-50%,-50%) rotate(-45deg)}
+.ps-s{flex:1;overflow-y:auto;overscroll-behavior:contain;padding:26px clamp(20px,3.2vw,34px) 30px;scrollbar-width:thin}
+.ps-top{display:flex;flex-direction:column;align-items:flex-start;gap:6px;margin-bottom:26px}
+.ps-name{overflow:hidden;padding-bottom:.1em}
+.ps-name h2{font-size:clamp(44px,6vw,64px);font-weight:900;letter-spacing:-.055em;line-height:1;margin-top:10px;animation:psIn .8s var(--ease) both}
+@keyframes psIn{from{transform:translateY(100%)}to{transform:none}}
+.ps-who{font-size:15px;color:var(--mu);animation:fadeup .6s var(--ease) both}
+.ps-price{display:flex;align-items:baseline;gap:8px;margin-top:14px}
+.ps-price b{font-size:clamp(40px,5vw,54px);font-weight:800;letter-spacing:-.055em;line-height:1}
+.ps-price>span{font-size:14px;color:var(--mu)}
+.ps-bill{font-size:13.5px;color:var(--mu)}
+.ps-c section{margin-top:34px;animation:fadeup .7s var(--ease) both;animation-delay:calc(var(--n)*70ms)}
+.ps-c section:first-child{margin-top:0}
+.ps-h3{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--vi2);margin-bottom:16px}
+.ps-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.pst{padding:14px 15px;border-radius:16px;background:rgba(255,255,255,.04);border:1px solid var(--ln);display:flex;flex-direction:column;gap:5px;min-width:0}
+.pst small{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--mu2)}
+.pst b{font-size:15px;font-weight:650;letter-spacing:-.02em}
+.pst em{font-style:normal;font-size:12.5px;color:var(--vi2)}
+.pst.big{grid-column:1/-1;flex-direction:row;align-items:baseline;gap:12px;flex-wrap:wrap;background:linear-gradient(135deg,rgba(139,92,255,.18),rgba(139,92,255,.05));border-color:rgba(167,139,250,.28)}
+.pst.big small{width:100%}
+.pst.big b{font-size:clamp(26px,3.4vw,34px);font-weight:800;letter-spacing:-.045em}
+.ps-tl{position:relative;display:flex;flex-direction:column;gap:6px}
+.ps-tl::before{content:'';position:absolute;left:15px;top:14px;bottom:14px;width:2px;border-radius:2px;background:rgba(255,255,255,.08)}
+.ps-tl::after{content:'';position:absolute;left:15px;top:14px;bottom:14px;width:2px;border-radius:2px;background:linear-gradient(180deg,var(--cy),var(--vi));transform-origin:0 0;transform:scaleY(0);transition:transform 2.2s var(--ease) .5s}
+.ps.o .ps-tl::after{transform:scaleY(1)}
+.ps-tl li{position:relative;display:flex;gap:16px;padding:10px 0}
+.ps-tl .no{flex:none;position:relative;z-index:1;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:#15112a;border:1.5px solid rgba(167,139,250,.5);font-family:var(--mono);font-size:12px;color:#c4b5fd}
+.ps-tl .ttl{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ps-tl .ttl b{font-size:16px;font-weight:650;letter-spacing:-.02em}
+.ps-tl .ttl em{font-style:normal;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:99px;background:rgba(255,255,255,.06);color:var(--mu)}
+.ps-tl p{margin-top:5px;font-size:14px;line-height:1.55;color:var(--mu)}
+.ps-inc{display:grid;grid-template-columns:1fr 1fr;gap:12px 20px}
+.ps-inc li{display:flex;gap:11px;align-items:flex-start}
+.ps-inc svg{flex:none;margin-top:2px}
+.ps-inc b{display:block;font-size:14.5px;font-weight:600;letter-spacing:-.01em}
+.ps-inc span{display:block;margin-top:2px;font-size:12.5px;line-height:1.45;color:var(--mu)}
+.ps-need{display:flex;flex-direction:column;gap:10px}
+.ps-need li{display:flex;gap:16px;padding:16px 18px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid var(--ln)}
+.ps-need li>span{font-family:var(--mono);font-size:12px;color:var(--vi2);padding-top:2px}
+.ps-need b{font-size:15px;font-weight:650;letter-spacing:-.02em}
+.ps-need p{margin-top:4px;font-size:13.5px;line-height:1.55;color:var(--mu)}
+.ps-fit{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ps-fit>div{padding:18px;border-radius:18px;border:1px solid var(--ln);background:rgba(255,255,255,.03)}
+.ps-fit .yes{border-color:rgba(110,231,183,.22);background:rgba(110,231,183,.04)}
+.ps-fit small{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--mu2);margin-bottom:12px}
+.ps-fit .yes small{color:#6ee7b7}
+.ps-fit li{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;line-height:1.5;color:#d4d4de}
+.ps-fit li+li{margin-top:10px}
+.ps-fit li svg{flex:none;margin-top:2px}
+.ps-fit li i{flex:none;width:10px;height:2px;margin:8px 4px 0 3px;border-radius:2px;background:var(--mu2)}
+.ps-up{display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;margin-top:12px;padding:15px 18px;border-radius:16px;border:1px solid var(--ln);background:transparent;color:var(--mu);font:inherit;font-size:14px;text-align:left;cursor:pointer;transition:border-color .3s,background .3s}
+.ps-up b{color:#fff;font-weight:600;white-space:nowrap}
+.ps-up:hover{border-color:rgba(167,139,250,.5);background:rgba(139,92,255,.08)}
+.ps-know li{position:relative;padding-left:22px;font-size:14px;line-height:1.55;color:var(--mu)}
+.ps-know li+li{margin-top:10px}
+.ps-know li::before{content:'';position:absolute;left:2px;top:.62em;width:7px;height:7px;border-radius:50%;background:var(--vi2)}
+.ps-f{flex:none;display:grid;grid-template-columns:auto 1fr;gap:6px 18px;align-items:center;padding:16px 20px 18px;border-top:1px solid var(--ln);background:rgba(10,9,18,.9)}
+.ps-fp b{display:block;font-size:22px;font-weight:800;letter-spacing:-.04em}
+.ps-fp span{font-size:12px;color:var(--mu)}
+.ps-f .btn{justify-self:stretch;width:100%;height:52px}
+.ps-n{grid-column:1/-1;font-size:12.5px;color:var(--mu2);text-align:center;transition:color .3s}
+.ps-n.on{color:#6ee7b7}
+@media (max-width:720px){
+  .ps-p{top:auto;left:0;right:0;bottom:0;width:100%;height:94svh;border-radius:28px 28px 0 0;transform:translateY(105%)}
+  .ps-h{padding:14px 14px 12px 14px}
+  .ps-tabs button{padding:0 12px;font-size:13px}
+  .ps-stats{grid-template-columns:1fr 1fr}
+  .ps-inc,.ps-fit{grid-template-columns:1fr}
+  .ps-f{grid-template-columns:1fr;padding-bottom:max(16px,env(safe-area-inset-bottom))}
+  .ps-fp{display:none}
+}
+@media (max-height:520px){
+  .ps-p{top:6px;bottom:6px}
+  .ps-h{padding:10px 12px}
+  .ps-s{padding-top:16px}
+  .ps-name h2{font-size:38px;margin-top:4px}
+  .ps-f{padding:10px 16px;gap:4px 14px}
+  .ps-f .btn{height:44px}
+  .ps-n{display:none}
+}
+@media (prefers-reduced-motion:reduce){.ps-p,.ps-bd{transition:none}.ps-c section,.ps-name h2,.ps-who{animation:none}.ps-tl::after{transition:none;transform:scaleY(1)}}
+
+/* ── motion kit ── */
+html.smooth{scroll-behavior:auto!important}
+.split .sl{display:block}
+.split .sw2{display:inline-block;overflow:hidden;vertical-align:top;padding:.04em .06em .14em;margin:-.04em -.06em -.14em}
+.split .sw2i{display:inline-block;transform:translateY(115%) rotate(5deg);transform-origin:0 100%;transition:transform 1.15s var(--ease) calc(var(--i)*65ms)}
+.split.in .sw2i{transform:none}
+.mq{position:relative;overflow:hidden;padding:clamp(26px,4vw,44px) 0;border-block:1px solid var(--ln);background:linear-gradient(180deg,rgba(255,255,255,.02),transparent);z-index:2;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.mq-t{display:flex;width:max-content;will-change:transform}
+.mq-r{display:flex;flex:none;align-items:center}
+.mq-r span{display:inline-flex;align-items:center;gap:clamp(22px,3vw,44px);padding-right:clamp(22px,3vw,44px);font-size:clamp(34px,6vw,84px);font-weight:800;letter-spacing:-.05em;text-transform:uppercase;color:#fff;white-space:nowrap}
+.mq-r span.o{color:transparent;-webkit-text-stroke:1.2px rgba(255,255,255,.38)}
+.mq-r span i{font-style:normal;font-size:.36em;color:var(--vi2);-webkit-text-stroke:0}
+.rail{position:fixed;right:clamp(14px,1.6vw,26px);top:50%;transform:translateY(-50%);z-index:150;display:flex;flex-direction:column;gap:4px;align-items:flex-end}
+.rail a{display:flex;align-items:center;gap:12px;padding:6px 0;color:var(--mu2)}
+.rail a span{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;opacity:0;transform:translateX(8px);transition:opacity .3s,transform .4s var(--ease);pointer-events:none;white-space:nowrap}
+.rail a i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.22);transition:transform .4s var(--ease),background .3s,box-shadow .3s}
+.rail a:hover span,.rail a.on span{opacity:1;transform:none}
+.rail a.on{color:#fff}
+.rail a.on i{background:var(--vi2);transform:scale(1.5);box-shadow:0 0 14px var(--vi)}
+.rail a:hover i{background:#fff}
+.kbd{white-space:nowrap;display:none;align-items:center;gap:8px;height:34px;padding:0 10px 0 12px;border-radius:99px;border:1px solid var(--ln);background:rgba(255,255,255,.04);color:var(--mu);font-size:12.5px;font-weight:500;cursor:pointer;transition:border-color .3s,color .3s;margin-right:6px}
+.kbd:hover{color:#fff;border-color:rgba(255,255,255,.22)}
+.kbd kbd,.pal kbd{font-family:var(--mono);font-size:10.5px;padding:2px 6px;border-radius:6px;background:rgba(255,255,255,.08);color:#d4d4de;border:1px solid rgba(255,255,255,.08)}
+.pal{position:fixed;inset:0;z-index:600;display:flex;align-items:flex-start;justify-content:center;padding:14vh 16px 16px;background:rgba(3,3,6,.55);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);opacity:0;pointer-events:none;transition:opacity .3s}
+.pal.o{opacity:1;pointer-events:auto}
+.pal-b{width:min(560px,100%);border-radius:22px;overflow:hidden;transform:translateY(14px) scale(.97);transition:transform .45s var(--ease)}
+.pal.o .pal-b{transform:none}
+.pal input{width:100%;height:60px;padding:0 22px;background:transparent;border:0;border-bottom:1px solid var(--ln);outline:0;color:#fff;font:inherit;font-size:16px}
+.pal input::placeholder{color:var(--mu2)}
+.pal ul{max-height:min(46vh,360px);overflow:auto;padding:8px}
+.pal li{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border-radius:12px;font-size:14.5px;font-weight:550;color:#d4d4de;cursor:pointer;transition:background .2s}
+.pal li small{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--mu2)}
+.pal li.on{background:rgba(139,92,255,.18);color:#fff}
+.pal li.none{color:var(--mu);cursor:default}
+.pal-f{display:flex;gap:18px;padding:12px 18px;border-top:1px solid var(--ln);font-size:12px;color:var(--mu2)}
+.pal-f span{display:inline-flex;align-items:center;gap:5px}
+.bigmark{display:flex;justify-content:center;font-size:clamp(32px,11.3vw,190px);font-weight:900;letter-spacing:-.07em;line-height:.8;padding:clamp(30px,6vw,70px) 0 0;user-select:none;overflow:hidden;-webkit-mask-image:linear-gradient(180deg,#000 30%,transparent 98%);mask-image:linear-gradient(180deg,#000 30%,transparent 98%)}
+.bigmark span{display:inline-block;transform:translateY(80%);opacity:0;background:linear-gradient(180deg,rgba(255,255,255,.34),rgba(139,92,255,.12));-webkit-background-clip:text;background-clip:text;color:transparent;transition:transform 1.3s var(--ease) calc(var(--i)*55ms),opacity 1s ease calc(var(--i)*55ms);padding-bottom:.12em}
+.bigmark.in span{transform:none;opacity:1}
+.hs-w{transform:translate3d(0,calc(var(--hs,0)*-110px),0) scale(calc(1 - var(--hs,0)*.08));will-change:transform}
+.hero-grid>div:first-child{transform:translate3d(0,calc(var(--hs,0)*-46px),0);opacity:calc(1 - var(--hs,0)*1.15)}
+/* moment radar */
+.rad{position:relative;height:430vh;z-index:2}
+.rad-stick{position:sticky;top:0;height:100vh;height:100svh;display:flex;align-items:center;padding-top:72px}
+.rad-top{display:flex;flex-direction:column;align-items:flex-start;gap:16px;margin-bottom:clamp(20px,3.4vh,40px)}
+.rad-top .h2{font-size:clamp(32px,4.6vw,66px)}
+.rad-top .lead{max-width:560px;margin:0}
+.rad-main{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:16px;align-items:stretch}
+.rad-main>*{min-width:0}
+.rad-chart{border-radius:26px;padding:clamp(18px,2.4vw,30px)}
+.rad-lbl{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.bars{overflow:visible;position:relative;height:clamp(110px,17vh,170px);display:flex;align-items:flex-end;gap:2px;margin:20px 0 22px}
+.bars i{flex:1;min-width:1px;height:calc(var(--h)*100%);border-radius:2px;background:rgba(255,255,255,.55);opacity:clamp(.14,calc((var(--p,0) - var(--x))*60 + .14),1)}
+.bars i.pk{background:linear-gradient(180deg,var(--cy),var(--vi))}
+.bars .head{position:absolute;top:-6px;bottom:-6px;left:calc(var(--p,0)*100%);width:2px;background:#fff;box-shadow:0 0 18px 2px rgba(167,139,250,.9);border-radius:2px;pointer-events:none}
+.bars .head::before{content:'';position:absolute;top:-5px;left:50%;width:10px;height:10px;transform:translateX(-50%) rotate(45deg);background:#fff;border-radius:2px}
+.lane{padding:14px 0;border-top:1px solid var(--ln)}
+.ln-t{display:flex;justify-content:space-between;gap:12px;font-size:13.5px;font-weight:600;color:var(--mu)}
+.ln-t em{font-style:normal;font-family:var(--mono);font-size:12px;color:var(--mu2)}
+.lane.us .ln-t{color:#fff}.lane.us .ln-t em{color:var(--vi2)}
+.ln-k{position:relative;height:22px;margin-top:10px;border-radius:99px;background:rgba(255,255,255,.04)}
+.pin{position:absolute;top:50%;left:calc(var(--x)*100%);width:16px;height:16px;border-radius:50%;opacity:clamp(0,calc((var(--p,0) - var(--x))*80),1);transform:translate(-50%,-50%) scale(clamp(.2,calc((var(--p,0) - var(--x))*40 + .2),1));background:#6b6b82}
+.lane.us .pin{background:linear-gradient(135deg,var(--cy),var(--vi));box-shadow:0 0 18px rgba(139,92,255,.9)}
+.rad-card{border-radius:26px;padding:clamp(20px,2.4vw,30px);display:flex;flex-direction:column;gap:14px;min-height:0}
+.rc-t{animation:fadeup .6s var(--ease)}
+.rc-t h3{font-size:clamp(22px,2.4vw,32px);font-weight:800;letter-spacing:-.04em;line-height:1.05}
+.rc-t p{margin-top:8px;font-size:14px;line-height:1.5;color:var(--mu)}
+.rc-tag{display:inline-block;margin-top:14px;padding:6px 12px;border-radius:99px;font-size:12px;font-weight:600;background:rgba(255,255,255,.06);color:var(--mu)}
+.rc-tag.hot{background:rgba(139,92,255,.18);color:#c4b5fd}
+.stg{display:flex;flex-direction:column;gap:9px;margin-top:auto}
+.stg li{display:flex;align-items:center;gap:12px;font-size:13.5px;font-weight:550;color:#fff;opacity:clamp(.3,calc((var(--lp,0)*5.4 - var(--k))*3 + .3),1)}
+.stg li i{flex:none;width:18px;height:18px;border-radius:50%;border:1.5px solid rgba(255,255,255,.3);background:rgba(110,231,183,calc(clamp(0,(var(--lp,0)*5.4 - var(--k))*3,1)*.9));transition:none}
+.rad.static{height:auto}
+.rad.static .rad-stick{position:static;height:auto;padding:clamp(60px,9vw,120px) 0}
+@media (max-width:1100px){.rail{display:none}.rad-main{grid-template-columns:1fr}.rad-card{flex-direction:row;flex-wrap:wrap;align-items:flex-start;gap:14px 28px}.rad-card .lbl{width:100%}.rc-t{flex:1 1 220px}.stg{margin-top:0;flex:1 1 200px;flex-direction:row;flex-wrap:wrap;gap:8px 16px}}
+@media (min-width:1000px){.kbd{display:inline-flex}}
+@media (max-width:720px){.bars{gap:1px}.rad{height:380vh}.rad-stick{padding-top:84px}.rad-top{gap:10px;margin-bottom:14px}.rad-top .lead{display:none}.bars{height:84px;margin:14px 0 14px}.lane{padding:9px 0}.ln-k{height:18px;margin-top:6px}.pin{width:13px;height:13px}.rad-card{padding:16px 18px;gap:10px}.rc-t p{display:none}.rc-tag{margin-top:8px}.stg li{font-size:12px}.mq-r span{font-size:clamp(30px,10vw,48px)}}
+@media (prefers-reduced-motion:reduce){.split .sw2i,.bigmark span{transform:none!important;opacity:1!important;transition:none!important}.hs-w,.hero-grid>div:first-child{transform:none!important;opacity:1!important}}
+
 /* ── rules room ── */
 .rr{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.3fr);gap:16px;align-items:stretch}
 .rr-l,.rr-r{border-radius:28px;padding:clamp(22px,2.8vw,32px)}
@@ -383,10 +569,10 @@ section[id]{scroll-margin-top:96px}
 .mo-ok:hover{transform:scale(1.05)}
 .rr-n{margin-top:14px;font-size:12px;color:var(--mu2)}
 .prom{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:16px}
-.pm{display:flex;gap:14px;align-items:flex-start;padding:22px;border-radius:22px;width:100%}
-.pm svg{flex:none;margin-top:2px}
-.pm b{display:block;font-size:15.5px;font-weight:650;letter-spacing:-.02em}
-.pm span{display:block;margin-top:4px;font-size:13.5px;line-height:1.5;color:var(--mu)}
+.prm{display:flex;gap:14px;align-items:flex-start;padding:22px;border-radius:22px;width:100%}
+.prm svg{flex:none;margin-top:2px}
+.prm b{display:block;font-size:15.5px;font-weight:650;letter-spacing:-.02em}
+.prm span{display:block;margin-top:4px;font-size:13.5px;line-height:1.5;color:var(--mu)}
 @media (prefers-reduced-motion:reduce){.mo-chip{animation:none}.sw,.sw i{transition:none}}
 
 /* ── compare ── */
@@ -519,8 +705,8 @@ section[id]{scroll-margin-top:96px}
 .foot{padding:70px 0 120px;border-top:1px solid var(--ln);position:relative;z-index:2;background:linear-gradient(180deg,transparent,rgba(5,5,7,.9))}
 .foot-g{display:grid;grid-template-columns:1.5fr 1fr 1fr 1.2fr;gap:40px}
 .foot h4{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;color:var(--mu2);text-transform:uppercase;margin-bottom:18px;font-weight:500}
-.foot li{margin-bottom:11px}
-.foot li a,.foot li button{font-size:14px;color:var(--mu);transition:color .25s;background:none;border:0;cursor:pointer;text-align:left}
+.foot li{margin-bottom:2px}
+.foot li a,.foot li button{display:inline-block;padding:7px 0;font-size:14px;color:var(--mu);transition:color .25s;background:none;border:0;cursor:pointer;text-align:left}
 .foot li a:hover,.foot li button:hover{color:#fff}
 .foot .tagl{margin-top:16px;font-size:20px;font-weight:700;letter-spacing:-.035em;line-height:1.15;max-width:260px}
 .foot-b{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:56px;padding-top:24px;border-top:1px solid var(--ln);font-size:12.5px;color:var(--mu2)}
@@ -566,6 +752,9 @@ section[id]{scroll-margin-top:96px}
   .step p{max-width:none}
   .node{flex:none;width:58px;height:58px}
 }
+@media (max-width:560px){
+  .hero .cta .btn,.fin .cta .btn{width:100%;justify-content:center}
+}
 @media (max-width:720px){
   .prom{grid-template-columns:1fr}
   .mo{flex-direction:column;align-items:flex-start;gap:10px}
@@ -583,7 +772,6 @@ section[id]{scroll-margin-top:96px}
   .hud{grid-template-columns:1fr 1fr;gap:10px}
   .hud-i{padding:18px}
   .foot-g{grid-template-columns:1fr;gap:34px}
-  .hire .sub{display:none}
   .hire{font-size:12px;gap:10px;padding:0 40px 0 14px;justify-content:flex-start}
   .dm{right:16px;bottom:16px;padding:0;width:56px;justify-content:center}
   .dm span{display:none}
@@ -653,6 +841,15 @@ function useSEO() {
     up('meta[property="og:url"]', ["meta", { property: "og:url" }], "content", LINKS.site);
     up('meta[property="og:site_name"]', ["meta", { property: "og:site_name" }], "content", "CreatorCuts");
     up('meta[name="twitter:card"]', ["meta", { name: "twitter:card" }], "content", "summary");
+    up('meta[name="twitter:title"]', ["meta", { name: "twitter:title" }], "content", title);
+    up('meta[name="twitter:description"]', ["meta", { name: "twitter:description" }], "content", desc);
+    up('meta[property="og:image"]', ["meta", { property: "og:image" }], "content", `${LINKS.site}/favicon.png`);
+    up('meta[name="twitter:image"]', ["meta", { name: "twitter:image" }], "content", `${LINKS.site}/favicon.png`);
+    up('meta[property="og:locale"]', ["meta", { property: "og:locale" }], "content", "en_IN");
+    up('link[rel="apple-touch-icon"]', ["link", { rel: "apple-touch-icon" }], "href", "/favicon.png");
+    let ld = document.head.querySelector('script[data-cc="ld"]');
+    if (!ld) { ld = document.createElement("script"); ld.type = "application/ld+json"; ld.setAttribute("data-cc", "ld"); document.head.appendChild(ld); }
+    ld.textContent = JSON.stringify({ "@context": "https://schema.org", "@type": "Organization", name: "CreatorCuts", url: LINKS.site, logo: `${LINKS.site}/favicon.png`, email: LINKS.email, sameAs: [LINKS.ig, LINKS.yt] });
     up('link[rel="canonical"]', ["link", { rel: "canonical" }], "href", LINKS.site);
     up('link[rel="icon"]', ["link", { rel: "icon" }], "href", "/favicon.png");
   }, []);
@@ -680,10 +877,28 @@ const EyeIcon = () => (
 
 /* ═══════════════ primitives ═══════════════ */
 
+/* Built-in copy of the logo, used if /favicon.png is missing */
+const LogoMark = ({ size }) => (
+  <svg className="logo-i" width={size} height={size} viewBox="0 0 512 512" aria-hidden="true">
+    <defs>
+      <linearGradient id="lg-c" x1="110" y1="110" x2="330" y2="400" gradientUnits="userSpaceOnUse"><stop offset="0" stopColor="#67E8F9" /><stop offset=".42" stopColor="#8B5CFF" /><stop offset="1" stopColor="#6D28D9" /></linearGradient>
+      <radialGradient id="lg-bg" cx=".3" cy=".16" r="1.05"><stop offset="0" stopColor="#261849" /><stop offset=".55" stopColor="#0D0B18" /><stop offset="1" stopColor="#07070C" /></radialGradient>
+      <clipPath id="lg-L"><polygon points="0,0 376,0 376,92 318,412 318,512 0,512" /></clipPath>
+      <clipPath id="lg-r"><rect width="512" height="512" rx="116" /></clipPath>
+    </defs>
+    <g clipPath="url(#lg-r)">
+      <rect width="512" height="512" fill="url(#lg-bg)" />
+      <g transform="translate(16 0)">
+        <g clipPath="url(#lg-L)"><path d="M334.6 182.1 A120 120 0 1 0 334.6 329.9" fill="none" stroke="url(#lg-c)" strokeWidth="74" /></g>
+        <line x1="396" y1="92" x2="338" y2="412" stroke="#fff" strokeWidth="14" strokeLinecap="round" />
+      </g>
+    </g>
+  </svg>
+);
 const Logo = ({ size = 30 }) => {
   const [bad, setBad] = useState(false);
-  if (bad) return <span className="logo-i logo-fb" style={{ width: size, height: size, fontSize: size * 0.5 }} aria-hidden="true">C</span>;
-  return <img className="logo-i" src="/favicon.png" alt="" width={size} height={size} onError={() => setBad(true)} />;
+  if (bad) return <LogoMark size={size} />;
+  return <img className="logo-i" src="/favicon.png" alt="" width={size} height={size} onError={() => setBad(true)} style={{ borderRadius: size * 0.23 }} />;
 };
 
 function Reveal({ children, delay = 0, className = "", as: Tag = "div", style, ...rest }) {
@@ -861,7 +1076,7 @@ function HiringBar({ onClose }) {
   );
 }
 
-function Navbar({ bar }) {
+function Navbar({ bar, onPalette }) {
   const [sc, setSc] = useState(false);
   const [open, setOpen] = useState(false);
   useEffect(() => {
@@ -881,6 +1096,7 @@ function Navbar({ bar }) {
         <nav className="nav-in" aria-label="Primary">
           <a className="brand" href="#top" aria-label="CreatorCuts home"><Logo size={26} /><span>CREATOR<em>CUTS</em></span></a>
           <div className="nav-l">{NAV.slice(0, 4).map(([l, h]) => <a key={h} href={h}>{l}</a>)}</div>
+          <button type="button" className="kbd" onClick={onPalette} aria-label="Open quick actions">Quick jump <kbd>{isMac() ? "⌘K" : "Ctrl K"}</kbd></button>
           <MagneticLink size="sm" variant="g" href={LINKS.dm} aria-label="Message CreatorCuts on Instagram">Instagram <span className="arr">→</span></MagneticLink>
           <button className={`burger ${open ? "o" : ""}`} aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} aria-controls="mobmenu" onClick={() => setOpen((v) => !v)}>
             <i /><i /><i />
@@ -983,8 +1199,304 @@ function HeroScene() {
   );
 }
 
+/* ═══════════════ motion kit: smooth scroll, split text, marquee, rail, palette ═══════════════ */
+
+const secTop = (id) => {
+  const el = id === "top" ? null : document.getElementById(id);
+  return el ? el.getBoundingClientRect().top + window.scrollY - (parseFloat(getComputedStyle(el).scrollMarginTop) || 0) : 0;
+};
+const goTo = (id) => {
+  const y = secTop(id);
+  if (window.__ccScrollTo) window.__ccScrollTo(y);
+  else window.scrollTo({ top: y, behavior: prefersReduced() ? "auto" : "smooth" });
+};
+
+/* Inertial wheel scrolling (desktop only). Touch, keyboard and scrollbar stay native. */
+function useSmoothScroll() {
+  useEffect(() => {
+    if (prefersReduced() || !finePointer()) return;
+    const html = document.documentElement;
+    html.classList.add("smooth");
+    let target = window.scrollY, cur = target, raf = 0, running = false, anim = null, lt = 0;
+    const max = () => Math.max(0, html.scrollHeight - window.innerHeight);
+    const loop = (t) => {
+      const dt = Math.min(0.05, (t - lt) / 1000 || 0.016); lt = t;
+      if (anim) {
+        const k = clamp((t - anim.t0) / anim.dur, 0, 1);
+        const e = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+        cur = anim.from + (anim.to - anim.from) * e; target = cur;
+        if (k >= 1) { anim = null; cur = target = clamp(cur, 0, max()); }
+      } else {
+        const d = target - cur;
+        cur = Math.abs(d) < 0.4 ? target : cur + d * (1 - Math.exp(-dt * 6.2));
+      }
+      window.scrollTo(0, cur);
+      if (anim || cur !== target) raf = requestAnimationFrame(loop); else running = false;
+    };
+    const kick = () => { if (!running) { cur = window.scrollY; running = true; lt = performance.now(); raf = requestAnimationFrame(loop); } };
+    const onWheel = (e) => {
+      if (e.ctrlKey || e.defaultPrevented || html.classList.contains("locked")) return;
+      for (let n = e.target; n && n !== document.body && n.nodeType === 1; n = n.parentElement) {
+        if (n.scrollHeight > n.clientHeight + 1 && /(auto|scroll)/.test(getComputedStyle(n).overflowY)) return;
+      }
+      e.preventDefault();
+      if (anim) { anim = null; target = cur; }
+      if (!running) target = window.scrollY;
+      const dy = e.deltaMode === 1 ? e.deltaY * 34 : e.deltaMode === 2 ? e.deltaY * window.innerHeight : e.deltaY;
+      target = clamp(target + dy, 0, max());
+      kick();
+    };
+    const onScroll = () => {
+      if (!running) { target = cur = window.scrollY; }
+      else if (Math.abs(window.scrollY - cur) > 60) { anim = null; target = cur = window.scrollY; }
+    };
+    const to = (y) => {
+      const from = window.scrollY, dest = clamp(y, 0, max());
+      anim = { from, to: dest, t0: performance.now(), dur: clamp(500 + Math.abs(dest - from) * 0.12, 700, 1700) };
+      kick();
+    };
+    const onClick = (e) => {
+      const a = e.target.closest && e.target.closest('a[href^="#"]');
+      if (!a || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
+      const id = a.getAttribute("href").slice(1) || "top";
+      if (id !== "top" && !document.getElementById(id)) return;
+      e.preventDefault(); to(secTop(id));
+      try { history.replaceState(null, "", id === "top" ? window.location.pathname : `#${id}`); } catch (er) { /* ignore */ }
+    };
+    window.__ccScrollTo = to;
+    window.addEventListener("wheel", onWheel, { passive: false });
+    window.addEventListener("scroll", onScroll, { passive: true });
+    document.addEventListener("click", onClick);
+    return () => {
+      cancelAnimationFrame(raf); html.classList.remove("smooth"); delete window.__ccScrollTo;
+      window.removeEventListener("wheel", onWheel); window.removeEventListener("scroll", onScroll); document.removeEventListener("click", onClick);
+    };
+  }, []);
+}
+
+/* Heading whose words rise out of a mask. Use "\n" for line breaks. */
+function Split({ text, as: Tag = "h2", className = "", ...rest }) {
+  const [ref, seen] = useInView({ threshold: 0.35 });
+  let k = 0;
+  return (
+    <Tag ref={ref} className={`${className} split ${seen ? "in" : ""}`} aria-label={text.replace(/\n/g, " ")} {...rest}>
+      {text.split("\n").map((ln, li) => (
+        <span className="sl" key={li} aria-hidden="true">
+          {ln.split(" ").map((w, wi) => <Fragment key={wi}><span className="sw2"><span className="sw2i" style={{ "--i": k++ }}>{w}</span></span>{" "}</Fragment>)}
+        </span>
+      ))}
+    </Tag>
+  );
+}
+
+/* Marquee that speeds up, slows down and skews with scroll velocity */
+const MQ = ["Twitch", "Kick", "YouTube", "Instagram Reels", "Shorts", "Hinglish captions", "Human-edited", "Flat monthly fee"];
+function Marquee() {
+  const wrap = useRef(null), trk = useRef(null);
+  useEffect(() => {
+    const el = trk.current, host = wrap.current;
+    if (!el || !host || prefersReduced()) return;
+    let x = 0, last = window.scrollY, v = 0, raf = 0, vis = true;
+    const io = new IntersectionObserver(([e]) => { vis = e.isIntersecting; }, { rootMargin: "100px" });
+    io.observe(host);
+    const tick = () => {
+      raf = requestAnimationFrame(tick);
+      if (!vis) { last = window.scrollY; return; }
+      const y = window.scrollY; v += ((y - last) - v) * 0.1; last = y;
+      const W = el.firstElementChild.scrollWidth;
+      x -= 0.7 + v * 0.32;
+      if (x <= -W) x += W; else if (x > 0) x -= W;
+      el.style.transform = `translate3d(${x.toFixed(2)}px,0,0) skewX(${clamp(-v * 0.1, -10, 10).toFixed(2)}deg)`;
+    };
+    raf = requestAnimationFrame(tick);
+    return () => { cancelAnimationFrame(raf); io.disconnect(); };
+  }, []);
+  const row = (k) => <div className="mq-r" key={k}>{MQ.map((t, i) => <span key={t} className={i % 2 ? "o" : ""}>{t}<i>✦</i></span>)}</div>;
+  return <div className="mq" ref={wrap} aria-hidden="true"><div className="mq-t" ref={trk}>{row(0)}{row(1)}</div></div>;
+}
+
+/* Section rail with live active state */
+const RAIL = [["top", "Top"], ["how", "Process"], ["engine", "Engine"], ["radar", "Moment Radar"], ["rules", "Your rules"], ["compare", "Compare"], ["plans", "Plans"], ["faq", "FAQ"]];
+function SectionRail() {
+  const [a, setA] = useState("top");
+  useEffect(() => {
+    let raf = 0;
+    const calc = () => {
+      const mid = window.innerHeight * 0.4; let cur = "top";
+      for (const [id] of RAIL) { const el = document.getElementById(id); if (el && el.getBoundingClientRect().top <= mid) cur = id; }
+      setA(cur);
+    };
+    const on = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(calc); };
+    calc(); window.addEventListener("scroll", on, { passive: true }); window.addEventListener("resize", on);
+    return () => { cancelAnimationFrame(raf); window.removeEventListener("scroll", on); window.removeEventListener("resize", on); };
+  }, []);
+  return (
+    <nav className="rail" aria-label="Page sections">
+      {RAIL.map(([id, l]) => <a key={id} href={`#${id}`} className={a === id ? "on" : ""} aria-label={l} aria-current={a === id ? "true" : undefined}><span>{l}</span><i /></a>)}
+    </nav>
+  );
+}
+
+/* Command palette */
+const isMac = () => typeof navigator !== "undefined" && /mac|iphone|ipad/i.test(navigator.platform || navigator.userAgent || "");
+function Palette({ open, setOpen }) {
+  const [q, setQ] = useState("");
+  const [sel, setSel] = useState(0);
+  const inp = useRef(null), prev = useRef(null);
+  const items = [
+    ...RAIL.filter(([id]) => id !== "top").map(([id, l]) => ({ k: id, l: `Go to ${l}`, h: "Section", run: () => goTo(id) })),
+    { k: "dm", l: "DM us on Instagram", h: "Action", run: () => window.open(LINKS.dm, "_blank", "noopener") },
+    { k: "mail", l: "Copy our email", h: "Action", run: () => { try { navigator.clipboard.writeText(LINKS.email); } catch (e) { window.location.href = `mailto:${LINKS.email}`; } } },
+    { k: "hire", l: "Apply to edit with us", h: "Action", run: () => window.open(LINKS.hiring, "_blank", "noopener") },
+    { k: "top", l: "Back to top", h: "Section", run: () => goTo("top") },
+  ];
+  const list = items.filter((i) => i.l.toLowerCase().includes(q.trim().toLowerCase()));
+  useEffect(() => {
+    if (open) { prev.current = document.activeElement; setQ(""); setSel(0); setTimeout(() => inp.current && inp.current.focus(), 30); }
+    else if (prev.current && prev.current.focus) prev.current.focus();
+  }, [open]);
+  useEffect(() => { setSel(0); }, [q]);
+  const run = (it) => { if (!it) return; setOpen(false); setTimeout(it.run, 120); };
+  const onKey = (e) => {
+    if (e.key === "Escape") { e.preventDefault(); setOpen(false); }
+    else if (e.key === "ArrowDown") { e.preventDefault(); setSel((s) => Math.min(list.length - 1, s + 1)); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); setSel((s) => Math.max(0, s - 1)); }
+    else if (e.key === "Enter") { e.preventDefault(); run(list[sel]); }
+  };
+  return (
+    <div className={`pal ${open ? "o" : ""}`} aria-hidden={!open} onMouseDown={(e) => { if (e.target === e.currentTarget) setOpen(false); }}>
+      <div className="pal-b g4" role="dialog" aria-modal="true" aria-label="Quick actions" onKeyDown={onKey}>
+        <input ref={inp} value={q} onChange={(e) => setQ(e.target.value)} placeholder="Jump to a section or take an action" aria-label="Search actions" tabIndex={open ? 0 : -1} />
+        <ul role="listbox">
+          {list.map((it, i) => (
+            <li key={it.k} role="option" aria-selected={i === sel} className={i === sel ? "on" : ""} onMouseMove={() => setSel(i)} onClick={() => run(it)}>
+              <span>{it.l}</span><small>{it.h}</small>
+            </li>
+          ))}
+          {!list.length && <li className="none">Nothing found</li>}
+        </ul>
+        <div className="pal-f"><span><kbd>↑</kbd><kbd>↓</kbd> move</span><span><kbd>↵</kbd> select</span><span><kbd>esc</kbd> close</span></div>
+      </div>
+    </div>
+  );
+}
+
+/* Giant footer wordmark */
+function BigMark() {
+  const [ref, seen] = useInView({ threshold: 0.2 });
+  return (
+    <div className={`bigmark ${seen ? "in" : ""}`} ref={ref} aria-hidden="true">
+      {"CREATORCUTS".split("").map((c, i) => <span key={i} style={{ "--i": i }}>{c}</span>)}
+    </div>
+  );
+}
+
+/* ═══════════════ moment radar (pinned, scroll-scrubbed) ═══════════════ */
+
+const RM = [
+  { x: 0.1, t: "1v4 clutch", d: "Chat spikes. Nobody says a word.", ai: false },
+  { x: 0.26, t: "Fail on camera", d: "Funny only if you see it.", ai: false },
+  { x: 0.41, t: "Story time", d: "Spoken out loud, so every tool finds it.", ai: true },
+  { x: 0.57, t: "Facecam reaction", d: "The face says it, not the transcript.", ai: false },
+  { x: 0.72, t: "Donation surprise", d: "Read out loud, easy to catch.", ai: true },
+  { x: 0.88, t: "Chat explodes at the finish", d: "The loudest moment is all emotes.", ai: false },
+];
+const RBARS = Array.from({ length: 120 }, (_, i) => {
+  const x = i / 119;
+  let h = 0.1 + (0.12 * Math.abs(Math.sin(i * 1.7) + Math.sin(i * 0.63) * 0.7)) / 1.7;
+  for (const m of RM) h += Math.exp(-Math.pow((x - m.x) / 0.012, 2)) * (m.ai ? 0.5 : 0.8);
+  return { x, h: Math.min(1, h) };
+});
+const STAGES = ["Found", "Cut", "Captions", "Sound", "Ready to post"];
+
+function MomentRadar() {
+  const sec = useRef(null);
+  const [n, setN] = useState(0);
+  const isStatic = () => prefersReduced() || window.innerHeight < 560;
+  const [stat, setStat] = useState(false);
+  useEffect(() => {
+    const on = () => setStat(isStatic());
+    on(); window.addEventListener("resize", on);
+    return () => window.removeEventListener("resize", on);
+  }, []);
+  useEffect(() => {
+    const el = sec.current; if (!el) return;
+    if (stat) { setN(RM.length); el.style.setProperty("--p", 1); el.style.setProperty("--lp", 1); return; }
+    let raf = 0, sp = 0, tp = 0, last = -1;
+    const read = () => {
+      const r = el.getBoundingClientRect(), span = r.height - window.innerHeight;
+      tp = clamp((0 - r.top) / Math.max(1, span), 0, 1);
+    };
+    const frame = () => {
+      sp += (tp - sp) * 0.14; if (Math.abs(tp - sp) < 0.0004) sp = tp;
+      const p = clamp((sp - 0.05) / 0.88, 0, 1);
+      let c = 0; RM.forEach((m, i) => { if (p >= m.x) c = i + 1; });
+      const cur = RM[c - 1], nx = RM[c];
+      const lp = cur ? clamp((p - cur.x) / ((nx ? nx.x : 1) - cur.x) * 1.15, 0, 1) : 0;
+      el.style.setProperty("--p", p.toFixed(4)); el.style.setProperty("--lp", lp.toFixed(4));
+      if (c !== last) { last = c; setN(c); }
+      if (sp !== tp) raf = requestAnimationFrame(frame); else raf = 0;
+    };
+    const on = () => { read(); if (!raf) raf = requestAnimationFrame(frame); };
+    on(); window.addEventListener("scroll", on, { passive: true }); window.addEventListener("resize", on);
+    return () => { cancelAnimationFrame(raf); window.removeEventListener("scroll", on); window.removeEventListener("resize", on); };
+  }, [stat]);
+  const cur = RM[n - 1];
+  const aiN = RM.slice(0, n).filter((m) => m.ai).length;
+  return (
+    <section ref={sec} className={`rad ${stat ? "static" : ""}`} id="radar" aria-labelledby="rad-h">
+      <div className="rad-stick">
+        <div className="wrap">
+          <div className="rad-top">
+            <span className="kick">Moment radar</span>
+            <Split id="rad-h" className="disp h2" text={"Same stream.\nDifferent eyes."} />
+            <p className="lead">Scroll to scan one 4-hour VOD. A transcript-only picker hears words. We watch what chat reacted to.</p>
+          </div>
+          <div className="rad-main">
+            <div className="rad-chart g3">
+              <div className="rad-lbl"><span className="lbl">Chat activity · VOD 4h 12m</span><span className="lbl">Illustrative example</span></div>
+              <div className="bars">
+                {RBARS.map((b, i) => <i key={i} className={b.h > 0.45 ? "pk" : ""} style={{ "--x": b.x.toFixed(4), "--h": b.h.toFixed(3) }} />)}
+                <div className="head" />
+              </div>
+              <div className="lane ai">
+                <div className="ln-t"><span>Transcript-only AI</span><em>{aiN} found</em></div>
+                <div className="ln-k">{RM.filter((m) => m.ai).map((m) => <b key={m.x} className="pin" style={{ "--x": m.x }} />)}</div>
+              </div>
+              <div className="lane us">
+                <div className="ln-t"><span>CreatorCuts: chat spikes + editor</span><em>{n} found</em></div>
+                <div className="ln-k">{RM.map((m) => <b key={m.x} className="pin" style={{ "--x": m.x }} />)}</div>
+              </div>
+              <p className="sr-only">In this illustrative example a transcript-only picker finds 2 of 6 moments and CreatorCuts finds all 6.</p>
+            </div>
+            <div className="rad-card g4">
+              <div className="lbl">{cur ? `Moment ${String(n).padStart(2, "0")} of 06` : "Scanning…"}</div>
+              <div className="rc-t" key={n}>
+                <h3>{cur ? cur.t : "Watching the VOD"}</h3>
+                <p>{cur ? cur.d : "Scroll to move the playhead."}</p>
+                {cur && <span className={`rc-tag ${cur.ai ? "" : "hot"}`}>{cur.ai ? "Both would find this" : "Transcript-only AI misses this"}</span>}
+              </div>
+              <ol className="stg">
+                {STAGES.map((s, k) => <li key={s} style={{ "--k": k }}><i />{s}</li>)}
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function Hero() {
   const ref = useRef(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || prefersReduced()) return;
+    let raf = 0;
+    const on = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => el.style.setProperty("--hs", clamp(window.scrollY / (window.innerHeight * 0.85), 0, 1).toFixed(4))); };
+    on(); window.addEventListener("scroll", on, { passive: true });
+    return () => { cancelAnimationFrame(raf); window.removeEventListener("scroll", on); };
+  }, []);
   useEffect(() => {
     const el = ref.current;
     if (!el || prefersReduced() || !finePointer()) return;
@@ -1028,7 +1540,7 @@ function Hero() {
               <MagneticLink variant="g" href="#how" external={false}>See how it works <span className="arr dn">↓</span></MagneticLink>
             </div>
           </div>
-          <HeroScene />
+          <div className="hs-w"><HeroScene /></div>
         </div>
 
         <div className="hud" role="list" aria-label="Key numbers">
@@ -1091,7 +1603,7 @@ function ProcessTimeline() {
       <div className="wrap">
         <Reveal className="sec-h">
           <span className="kick">Process</span>
-          <h2 id="how-h" className="disp h2">From stream<br />to posted.</h2>
+          <Split id="how-h" className="disp h2" text={"From stream\nto posted."} />
           <p className="lead">Four steps, and only the first is yours.</p>
         </Reveal>
         <div className="tlw" ref={wrap}>
@@ -1125,11 +1637,11 @@ function Engine() {
     return () => clearInterval(id);
   }, [seen]);
   return (
-    <section className="sec" aria-labelledby="eng-h">
+    <section className="sec" id="engine" aria-labelledby="eng-h">
       <div className="wrap">
         <Reveal className="sec-h">
           <span className="kick">The engine</span>
-          <h2 id="eng-h" className="disp h2">The CreatorCuts<br />engine.</h2>
+          <Split id="eng-h" className="disp h2" text={"The CreatorCuts\nengine."} />
           <p className="lead">A repeatable pipeline, not a freelancer's inbox.</p>
         </Reveal>
         <ol className="eng" ref={ref}>
@@ -1190,7 +1702,7 @@ function RulesRoom() {
       <div className="wrap">
         <Reveal className="sec-h">
           <span className="kick">Control</span>
-          <h2 id="rules-h" className="disp h2">You set the rules.<br />We follow them.</h2>
+          <Split id="rules-h" className="disp h2" text={"You set the rules.\nWe follow them."} />
           <p className="lead">Pay-per-view clippers earn from views, not from your reputation. We work on a flat fee, so your rules come first. Try them.</p>
         </Reveal>
 
@@ -1236,7 +1748,7 @@ function RulesRoom() {
         <div className="prom">
           {PROMISES.map(([t, d], i) => (
             <Reveal key={t} delay={i * 90} style={{ display: "flex" }}>
-              <div className="pm g3"><Check /><div><b>{t}</b><span>{d}</span></div></div>
+              <div className="prm g3"><Check /><div><b>{t}</b><span>{d}</span></div></div>
             </Reveal>
           ))}
         </div>
@@ -1320,7 +1832,7 @@ function Compare() {
       <div className="wrap">
         <Reveal className="sec-h">
           <span className="kick">Compare</span>
-          <h2 id="cmp-h" className="disp h2">How we stack up<br />against the market.</h2>
+          <Split id="cmp-h" className="disp h2" text={"How we stack up\nagainst the market."} />
           <p className="lead">We read the pricing pages, industry guides and user reviews so you don't have to.</p>
         </Reveal>
 
@@ -1372,7 +1884,7 @@ function Compare() {
 
 function WhySection() {
   return (
-    <section className="sec" aria-labelledby="why-h">
+    <section className="sec" id="why" aria-labelledby="why-h">
       <div className="wrap why">
         <Reveal className="why-l">
           <span className="kick" style={{ marginBottom: 22 }}>Why CreatorCuts</span>
@@ -1395,9 +1907,16 @@ function WhySection() {
 
 function Seg({ label, value, onChange, options }) {
   return (
-    <div className="seg g2" role="radiogroup" aria-label={label}>
+    <div className="seg g2" role="radiogroup" aria-label={label} onKeyDown={(e) => {
+      const k = e.key; if (!["ArrowRight", "ArrowDown", "ArrowLeft", "ArrowUp"].includes(k)) return;
+      e.preventDefault();
+      const i = options.findIndex(([v]) => v === value), n = options.length;
+      const j = (i + (k === "ArrowRight" || k === "ArrowDown" ? 1 : n - 1)) % n;
+      onChange(options[j][0]);
+      const btns = e.currentTarget.querySelectorAll("button"); if (btns[j]) btns[j].focus();
+    }}>
       {options.map(([v, l]) => (
-        <button key={v} role="radio" aria-checked={value === v} className={value === v ? "on" : ""} onClick={() => onChange(v)}>{l}</button>
+        <button key={v} role="radio" aria-checked={value === v} tabIndex={value === v ? 0 : -1} className={value === v ? "on" : ""} onClick={() => onChange(v)}>{l}</button>
       ))}
     </div>
   );
@@ -1424,7 +1943,7 @@ function Num({ value, fmt, ms = 800 }) {
   return <span className="num">{fmt(v)}</span>;
 }
 
-function PricingCard({ p, cur, yearly }) {
+function PricingCard({ p, cur, yearly, onOpen }) {
   const mo = monthly(p, cur, yearly);
   const yr = Math.round((cur === "INR" ? p.inr : p.usd) * 12 * (1 - YEARLY_OFF));
   const per = mo / p.n;
@@ -1442,20 +1961,233 @@ function PricingCard({ p, cur, yearly }) {
       <p className="cpc">{p.key === "studio" ? "As low as " : ""}<b><Num value={per} fmt={(n) => money(cur, n, cur === "INR" ? 0 : 2)} /></b> per clip</p>
       <div className="vol"><span aria-hidden="true">✂</span><div>{p.clips} edited clips / month</div></div>
       <ul className="feat">{p.features.map((f) => <li key={f}><Check />{f}</li>)}</ul>
-      <MagneticLink variant={p.pop ? "p" : "g"} block href={LINKS.dm}>{p.cta} <span className="arr">→</span></MagneticLink>
+      <MagneticLink variant={p.pop ? "p" : "g"} block href="#plans" external={false} onClick={(e) => { e.preventDefault(); onOpen(p.key); }} aria-haspopup="dialog">{p.cta} <span className="arr">→</span></MagneticLink>
+      <button type="button" className="more" onClick={() => onOpen(p.key)}>Details and how it works <span>→</span></button>
     </ThreeDCard>
+  );
+}
+
+/* ═══════════════ plan details layer ═══════════════ */
+
+const FEAT_INFO = {
+  "15 edited clips": "Fifteen finished vertical clips every month.",
+  "35 edited clips": "Thirty-five finished vertical clips every month.",
+  "60+ edited clips": "Sixty or more finished clips every month, for daily streamers.",
+  "1 platform": "We format and deliver for the one platform you pick.",
+  "2 platforms": "Two platforms, each clip rebuilt for where it lands.",
+  "Major platforms": "Shorts, Reels and the other big platforms you stream or post on.",
+  "Cinematic captions": "Word-timed captions styled for the scroll, Hinglish included.",
+  "Sound design": "Mix, impact and emphasis, so clips land with sound on.",
+  "Hook optimization": "The first seconds are cut to earn the stop.",
+  "48-hour turnaround": "Batches come back within 48 hours.",
+  "Monthly performance recap": "A short monthly look at what worked.",
+  "Custom thumbnail design": "Thumbnails designed for your clips.",
+  "Trend-matched hooks": "Hooks that fit what's working right now.",
+  "24-hour batch turnaround": "Batches come back within 24 hours.",
+  "Priority editing": "Your batches go to the front of the queue.",
+  "Performance review": "We review how your clips did and adjust the next batch.",
+  "Platform optimization": "Pacing and framing change per platform.",
+  "Dedicated editor": "One editor who learns your style and runs your account.",
+  "Custom branding": "Your colors, fonts and caption look on every clip.",
+  "Thumbnail suite": "A full set of thumbnails across your clips.",
+  "Priority turnaround": "The fastest lane we run.",
+  "Analytics reporting": "Clear reporting on how your clips perform.",
+  "Strategy support": "Help deciding what to clip, post and double down on.",
+  "Premium content management": "We manage your content calendar end to end.",
+};
+
+const DETAILS = {
+  starter: {
+    who: "Creators starting their content engine",
+    stats: [["Turnaround", "48 hours"], ["Platforms", "1"], ["Posting", "You upload"], ["Editing", "Shared team"]],
+    best: ["You're starting out and want a steady stream of clips", "You want to test what clips do for your channel", "You're happy to upload ready-made files yourself"],
+    not: ["You want us to post for you (Creator and Studio do)", "You need clips on more than one platform"],
+    up: ["creator", "Want posting handled and 35 clips?"],
+    steps: [
+      ["Edit", "We find and cut", "Editors review your VODs, pick the moments and edit your first batch. Batches return within 48 hours."],
+      ["You", "You review", "You get your clips and tell us anything you'd like changed."],
+      ["Files", "You upload", "You get ready-to-post files and publish them on your own channel."],
+      ["Recap", "Monthly recap", "A short summary of what worked, so the next batch gets sharper."],
+    ],
+  },
+  creator: {
+    who: "Channels posting every week",
+    stats: [["Turnaround", "24h batches"], ["Platforms", "2"], ["Posting", "We post"], ["Editing", "Priority"]],
+    best: ["You stream every week and want to be seen every week", "You want clips posted for you, not just delivered", "You want to approve what goes live"],
+    not: ["You stream daily and want a dedicated editor (that's Studio)", "You need every major platform covered"],
+    up: ["studio", "Streaming daily and need a dedicated editor?"],
+    steps: [
+      ["Edit", "We find and cut", "Editors review your VODs and edit in batches, on a 24-hour turnaround with priority editing."],
+      ["You", "You approve", "Clips can wait for your OK before anything goes live. You choose what to approve."],
+      ["Post", "We post", "Clips go out on your 2 platforms on schedule, each one rebuilt for where it lands."],
+      ["Review", "Performance review", "We look at how clips did and adjust hooks for the next batch."],
+    ],
+  },
+  studio: {
+    who: "Full-time creators who want a done-for-you pipeline",
+    stats: [["Turnaround", "Priority"], ["Platforms", "All major"], ["Posting", "We post"], ["Editing", "Dedicated"]],
+    best: ["You stream full-time and want your content run for you", "You want one editor who knows your style", "You want reporting and strategy, not just clips"],
+    not: ["You're just testing the idea (Starter is a lighter start)", "You need more than 60+ a month (ask us for Custom)"],
+    up: ["custom", "Need more volume or a team?"],
+    steps: [
+      ["Edit", "A dedicated editor", "One editor owns your account, learns your style and works on a priority turnaround."],
+      ["You", "You approve", "Clips can wait for your OK first, and your branding is applied to every clip."],
+      ["Post", "We run your calendar", "We post across all major platforms and manage your content calendar."],
+      ["Report", "Analytics and strategy", "Analytics reporting and strategy support, so each month builds on the last."],
+    ],
+  },
+};
+const NEEDS = [
+  ["Footage access", "A link to your Twitch or YouTube VODs, or a shared Drive folder. Twitch only keeps past broadcasts for a limited time (commonly 14 days, or 60 for Partners), so share early."],
+  ["Your rules", "What to approve and what to never clip. This is set in onboarding."],
+  ["Style references", "Two or three clips whose look you like, so we match your taste from the first batch."],
+];
+
+function PlanSheet({ planKey, setPlanKey, cur, yearly }) {
+  const open = !!planKey;
+  const [last, setLast] = useState("creator");
+  const [msg, setMsg] = useState(false);
+  const panel = useRef(null), prev = useRef(null);
+  useEffect(() => { if (planKey) setLast(planKey); }, [planKey]);
+  const key = planKey || last;
+  const p = PLANS.find((x) => x.key === key) || PLANS[1];
+  const d = DETAILS[p.key];
+  const mo = monthly(p, cur, yearly);
+  const per = mo / p.n;
+  const wk = p.n / 4.3;
+  const weekly = p.key === "starter" ? `${Math.floor(wk)}–${Math.ceil(wk)} a week` : p.key === "studio" ? `${Math.round(wk)}+ a week` : `${Math.round(wk)} a week`;
+  const close = () => setPlanKey(null);
+
+  useEffect(() => {
+    const html = document.documentElement;
+    if (open) {
+      prev.current = document.activeElement;
+      html.classList.add("locked"); document.body.style.overflow = "hidden";
+      setMsg(false);
+      setTimeout(() => { const b = panel.current && panel.current.querySelector(".ps-x"); if (b) b.focus(); }, 60);
+    } else {
+      html.classList.remove("locked"); document.body.style.overflow = "";
+      if (prev.current && prev.current.focus) prev.current.focus();
+    }
+    return () => { html.classList.remove("locked"); document.body.style.overflow = ""; };
+  }, [open]);
+  useEffect(() => {
+    if (!open) return;
+    const k = (e) => {
+      if (e.key === "Escape") { e.preventDefault(); close(); return; }
+      if (e.key !== "Tab" || !panel.current) return;
+      const f = [...panel.current.querySelectorAll('a[href],button:not([disabled])')].filter((n) => n.offsetParent !== null);
+      if (!f.length) return;
+      const a = f[0], z = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === a) { e.preventDefault(); z.focus(); }
+      else if (!e.shiftKey && document.activeElement === z) { e.preventDefault(); a.focus(); }
+    };
+    window.addEventListener("keydown", k);
+    return () => window.removeEventListener("keydown", k);
+  }, [open]);
+  useEffect(() => { const s = panel.current && panel.current.querySelector(".ps-s"); if (s) s.scrollTo({ top: 0 }); }, [key]);
+
+  const intro = `Hi CreatorCuts! I'd like the ${p.name} plan (${yearly ? "yearly" : "monthly"}, ${cur}). My channel: `;
+  const start = () => {
+    try { navigator.clipboard.writeText(intro); setMsg(true); setTimeout(() => setMsg(false), 6000); } catch (e) { /* ignore */ }
+  };
+  const [upKey, upText] = d.up;
+  return (
+    <div className={`ps ${open ? "o" : ""}`} aria-hidden={!open}>
+      <div className="ps-bd" onClick={close} />
+      <aside ref={panel} className="ps-p g4" role="dialog" aria-modal="true" aria-label={`${p.name} plan details`}>
+        <header className="ps-h">
+          <div className="ps-tabs" role="tablist" aria-label="Choose a plan">
+            {PLANS.map((x) => <button key={x.key} role="tab" aria-selected={x.key === key} className={x.key === key ? "on" : ""} tabIndex={open ? 0 : -1} onClick={() => setPlanKey(x.key)}>{x.name}</button>)}
+          </div>
+          <button className="ps-x" onClick={close} aria-label="Close plan details" tabIndex={open ? 0 : -1}><i /><i /></button>
+        </header>
+
+        <div className="ps-s">
+          <div className="ps-top">
+            <span className="kick">{p.badge || "Plan"}</span>
+            <div className="ps-name"><h2 key={p.key}>{p.name}</h2></div>
+            <p className="ps-who" key={`w${p.key}`}>{d.who}</p>
+            <div className="ps-price">
+              <b><Num value={mo} fmt={(n) => money(cur, Math.round(n))} /></b><span>/ month</span>
+            </div>
+            <p className="ps-bill">{yearly ? "Billed yearly, you save 20%" : "Billed monthly"} · <Num value={per} fmt={(n) => money(cur, n, cur === "INR" ? 0 : 2)} /> per clip</p>
+          </div>
+
+          <div className="ps-c" key={p.key}>
+            <section style={{ "--n": 0 }}>
+              <div className="ps-stats">
+                <div className="pst big"><small>Every month</small><b>{p.clips} clips</b><em>≈ {weekly}</em></div>
+                {d.stats.map(([k, v]) => <div className="pst" key={k}><small>{k}</small><b>{v}</b></div>)}
+              </div>
+            </section>
+
+            <section style={{ "--n": 1 }}>
+              <h3 className="ps-h3">How it works</h3>
+              <ol className="ps-tl">
+                {[["Day 0", "Message us", "Say which plan you want on Instagram. We confirm it and set your start date."], ["Setup", "Share footage and rules", "You give us VOD access, your never-clip list and a few style references."], ...d.steps.map(([tag, t, x]) => [tag, t, x])].map(([tag, t, x], i) => (
+                  <li key={t} style={{ "--i": i }}><span className="no">{i + 1}</span><div><div className="ttl"><b>{t}</b><em>{tag}</em></div><p>{x}</p></div></li>
+                ))}
+              </ol>
+            </section>
+
+            <section style={{ "--n": 2 }}>
+              <h3 className="ps-h3">What's included</h3>
+              <ul className="ps-inc">
+                {p.features.map((f) => <li key={f}><Check /><div><b>{f}</b>{FEAT_INFO[f] && <span>{FEAT_INFO[f]}</span>}</div></li>)}
+              </ul>
+            </section>
+
+            <section style={{ "--n": 3 }}>
+              <h3 className="ps-h3">What we need from you</h3>
+              <ul className="ps-need">
+                {NEEDS.map(([t, x], i) => <li key={t}><span>{String(i + 1).padStart(2, "0")}</span><div><b>{t}</b><p>{x}</p></div></li>)}
+              </ul>
+            </section>
+
+            <section style={{ "--n": 4 }}>
+              <h3 className="ps-h3">Is it right for you?</h3>
+              <div className="ps-fit">
+                <div className="yes"><small>Great if</small><ul>{d.best.map((x) => <li key={x}><Check />{x}</li>)}</ul></div>
+                <div className="no"><small>Maybe not if</small><ul>{d.not.map((x) => <li key={x}><i />{x}</li>)}</ul></div>
+              </div>
+              {upKey === "custom"
+                ? <a className="ps-up" href={LINKS.dm} target="_blank" rel="noopener noreferrer">{upText} <b>Ask about Custom →</b></a>
+                : <button className="ps-up" onClick={() => setPlanKey(upKey)}>{upText} <b>See {PLANS.find((x) => x.key === upKey).name} →</b></button>}
+            </section>
+
+            <section style={{ "--n": 5 }}>
+              <h3 className="ps-h3">Good to know</h3>
+              <ul className="ps-know">
+                <li>Unused clip credits roll over for one month.</li>
+                <li>Change plans any time. The new plan starts from your next billing cycle.</li>
+                <li>Everything starts in an Instagram DM. There's nothing to pay on this page.</li>
+                <li>You choose what we clip and what we never touch.</li>
+              </ul>
+            </section>
+          </div>
+        </div>
+
+        <footer className="ps-f">
+          <div className="ps-fp"><b>{money(cur, mo)}</b><span>/ month · {p.clips} clips</span></div>
+          <MagneticLink href={LINKS.dm} onClick={start} tabIndex={open ? 0 : -1}>Start {p.name} on Instagram <span className="arr">→</span></MagneticLink>
+          <p className={`ps-n ${msg ? "on" : ""}`} role="status">{msg ? "Intro message copied. Paste it in the DM and add your channel." : "We copy a ready-made intro message for you."}</p>
+        </footer>
+      </aside>
+    </div>
   );
 }
 
 function Pricing() {
   const [yearly, setYearly] = useState(true);
   const [cur, setCur] = useState("USD");
+  const [plan, setPlan] = useState(null);
   return (
     <section className="sec" id="plans" aria-labelledby="plans-h">
       <div className="wrap">
         <Reveal className="sec-h" style={{ alignItems: "center", textAlign: "center" }}>
           <span className="kick">Plans</span>
-          <h2 id="plans-h" className="disp h2">Pick your<br />engine.</h2>
+          <Split id="plans-h" className="disp h2" text={"Pick your\nengine."} />
           <p className="lead">Unused credits roll over for a month. Change plans any time.</p>
         </Reveal>
         <Reveal className="tgl">
@@ -1463,7 +2195,7 @@ function Pricing() {
           <Seg label="Currency" value={cur} onChange={setCur} options={[["USD", "USD"], ["INR", "INR"]]} />
         </Reveal>
         <div className="price-g">
-          {PLANS.map((p, i) => <Reveal key={p.key} delay={i * 110} style={{ display: "flex" }}><PricingCard p={p} cur={cur} yearly={yearly} /></Reveal>)}
+          {PLANS.map((p, i) => <Reveal key={p.key} delay={i * 110} style={{ display: "flex" }}><PricingCard p={p} cur={cur} yearly={yearly} onOpen={setPlan} /></Reveal>)}
         </div>
         <Reveal delay={150}>
           <div className="custom g3">
@@ -1475,6 +2207,7 @@ function Pricing() {
           </div>
         </Reveal>
       </div>
+      <PlanSheet planKey={plan} setPlanKey={setPlan} cur={cur} yearly={yearly} />
     </section>
   );
 }
@@ -1488,7 +2221,7 @@ function FAQ() {
       <div className="wrap">
         <Reveal className="sec-h" style={{ alignItems: "center", textAlign: "center" }}>
           <span className="kick">FAQ</span>
-          <h2 id="faq-h" className="disp h2">Questions,<br />answered.</h2>
+          <Split id="faq-h" className="disp h2" text={"Questions,\nanswered."} />
         </Reveal>
         <div className="faq">
           {FAQS.map((f, i) => (
@@ -1561,6 +2294,7 @@ function Footer() {
             </ul>
           </div>
         </div>
+        <BigMark />
         <div className="foot-b"><span>© 2026 CreatorCuts</span><span>creatorcuts.in</span></div>
       </div>
     </footer>
@@ -1573,19 +2307,39 @@ function CreatorCuts() {
   const root = useRef(null);
   const [bar, setBar] = useState(true);
   useSEO();
+  useSmoothScroll();
+  useEffect(() => {
+    const h = window.location.hash.slice(1);
+    if (!h || !/^[\w-]+$/.test(h)) return;
+    const go = () => { if (document.getElementById(h)) window.scrollTo(0, secTop(h)); };
+    const ts = [60, 450, 1100].map((ms) => setTimeout(go, ms));
+    const stop = () => ts.forEach(clearTimeout);
+    window.addEventListener("wheel", stop, { once: true, passive: true }); window.addEventListener("touchstart", stop, { once: true, passive: true });
+    return () => { stop(); window.removeEventListener("wheel", stop); window.removeEventListener("touchstart", stop); };
+  }, []);
+  const [pal, setPal] = useState(false);
+  useEffect(() => {
+    const k = (e) => { if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") { e.preventDefault(); setPal((v) => !v); } };
+    window.addEventListener("keydown", k); return () => window.removeEventListener("keydown", k);
+  }, []);
   const closeBar = useCallback(() => setBar(false), []);
   return (
     <div className="cc" ref={root}>
       <style>{CSS}</style>
+      <a className="skiplink" href="#main">Skip to content</a>
       <Atmosphere />
       <ScrollProgress />
       <CursorFX rootRef={root} />
       {bar && <HiringBar onClose={closeBar} />}
-      <Navbar bar={bar} />
-      <main>
+      <Navbar bar={bar} onPalette={() => setPal(true)} />
+      <SectionRail />
+      <Palette open={pal} setOpen={setPal} />
+      <main id="main" tabIndex={-1}>
         <Hero />
+        <Marquee />
         <ProcessTimeline />
         <Engine />
+        <MomentRadar />
         <RulesRoom />
         <Compare />
         <WhySection />
